@@ -8,9 +8,14 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+import swervelib.SwerveInputStream;
+import swervelib.encoders.SwerveAbsoluteEncoder;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.io.File;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -30,7 +36,21 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    
   }
+
+   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                                                                () -> m_driverController.getLeftY() * -1,
+                                                                () -> m_driverController.getLeftX() * -1) 
+                                                            .withControllerRotationAxis(m_driverController::getRightX)
+                                                            .deadband(OperatorConstants.DEADBAND)
+                                                            .scaleTranslation(0.8)
+                                                            .allianceRelativeControl(true);
+
+
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(m_driverController::getRightX,
+                                                                                             m_driverController::getRightY)
+                                                           .headingWhile(true);
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -43,6 +63,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
+    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+    
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
