@@ -1,7 +1,7 @@
 {
   "location": {
-    "front": 12,
-    "left": -11.5
+    "front": 10.875,
+    "left": -10.875
   },
   "absoluteEncoderOffset": 0,
   "drive": {
@@ -15,7 +15,7 @@
     "canbus": null
   },
   "encoder": {
-    "type": "attached",
+    "type": "sparkflex_attached",
     "id": null,
     "canbus": null
   },
