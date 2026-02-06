@@ -13,7 +13,11 @@ import static edu.wpi.first.units.Units.Meter;
 import java.io.File;
 import java.util.function.Supplier;
 
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -23,12 +27,20 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 public class SwerveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
 
+
   File directory = new File(Filesystem.getDeployDirectory(),"swerve");
   SwerveDrive  swerveDrive;
+  private final  AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
+  
+  
   public SwerveSubsystem() {
+    
     try
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, new Pose2d(new Translation2d(Meter.of(1), 
@@ -40,6 +52,7 @@ public class SwerveSubsystem extends SubsystemBase {
     {
       throw new RuntimeException(e);
     }
+    swerveDrive.setHeadingCorrection(false); 
   }
 
   /**
@@ -69,6 +82,8 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(m_gyro.getYaw());
+    SmartDashboard.putNumber("NavX-Yaw", m_gyro.getYaw());
   }
 
   @Override
@@ -90,5 +105,16 @@ public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
     swerveDrive.driveFieldOriented(velocity.get());
   });
 }
+
+
+  public void driveRobotOriented(ChassisSpeeds velocity){
+    swerveDrive.drive(velocity);
+  }
+
+  public Command driveRobotOriented(Supplier<ChassisSpeeds> velocity){
+    return run(() -> {
+      swerveDrive.drive(velocity.get());
+    });
+  }
 
 }
