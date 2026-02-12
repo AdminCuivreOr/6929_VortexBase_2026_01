@@ -24,4 +24,16 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double DEADBAND = 0.05; 
   }
+
+  public static class TurretConstants {
+
+    public static final int MOTOR_ID = 9;
+
+    public static final double ANGLE_TOLERANCE_DEG = 5;
+    public static final double ZERO_OFFSET_DEG = 0;
+    public static final double MIN_ANGLE_DEG = 0;
+    public static final double MAX_ANGLE_DEG = 180;
+
+
+  }
 }
