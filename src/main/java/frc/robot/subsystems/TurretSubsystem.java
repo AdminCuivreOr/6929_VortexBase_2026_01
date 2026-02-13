@@ -63,17 +63,20 @@ public class TurretSubsystem extends SubsystemBase {
         Constants.TurretConstants.MAX_ANGLE_DEG
     );
  
-    double output;
+    double output = 0.1;
     double position = getAngle();
     double erreur = targetDeg - position;
 
-    if (erreur > 0) {
-
+    if (erreur > Constants.TurretConstants.ANGLE_TOLERANCE_DEG) {
+     m_motor.set(output);
     }
-
-    // Optional static friction feedforward
-    m_motor.set(output);
- 
+    else if (erreur < -Constants.TurretConstants.ANGLE_TOLERANCE_DEG)  {
+     m_motor.set(-output);
+    }
+    else {
+    // si erreur plus grsnde que 5 moteur à 0,1, si plus petit que -5 moteur à -0,1 sinon moteur à 0
+    m_motor.set(0);
+    }
     SmartDashboard.putNumber("Turret/SetpointDeg", targetDeg);
   }
  
