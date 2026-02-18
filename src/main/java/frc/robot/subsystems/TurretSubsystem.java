@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 
  import com.revrobotics.spark.SparkFlex;
-
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 
@@ -12,6 +13,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
  import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -20,17 +22,22 @@ import frc.robot.Constants;
  
 public class TurretSubsystem extends SubsystemBase {
  
-  private final SparkFlex m_motor =
-      new SparkFlex(Constants.TurretConstants.MOTOR_ID, MotorType.kBrushless);
+  private final SparkMax m_motor =
+      new SparkMax(Constants.TurretConstants.MOTOR_ID, MotorType.kBrushless);
  
+
+  DigitalInput m_limitSwitchGauche = new DigitalInput(0);
+  DigitalInput m_limitSwitchDroite = new DigitalInput(1);
+
+
   // Through-Bore connected to SparkFlex data port (duty-cycle absolute)
-  private final SparkAbsoluteEncoder m_absEncoder =
-      m_motor.getAbsoluteEncoder();
+  private final RelativeEncoder m_relEncoder =
+      m_motor.getEncoder();
  
  
   public TurretSubsystem() {
     var config = new SparkMaxConfig();
-    double degPerEncoderRotation = 360.0 / 10.0;
+    double degPerEncoderRotation = 463.80 / 360.0; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
 
     config.encoder.positionConversionFactor(degPerEncoderRotation);
  
@@ -46,7 +53,7 @@ public class TurretSubsystem extends SubsystemBase {
   /** Turret angle in radians, wrapped to [-pi, pi], with your zero offset applied. */
   public double getAngle() {
     // Absolute encoder gives [0..2π) in our conversion, but can be any continuous value depending on REVLib behavior.
-    double rawDeg = m_absEncoder.getPosition();
+    double rawDeg = m_relEncoder.getPosition(); // pas vraiment des degrés, valeur encodeur
  
     // Apply zero offset (calibrated)
     double adjusted = rawDeg - Constants.TurretConstants.ZERO_OFFSET_DEG;
@@ -87,6 +94,15 @@ public class TurretSubsystem extends SubsystemBase {
  
   @Override
   public void periodic() {
+    if (m_limitSwitchDroite.get() == true){ // set l'angle à 90
+      
+    }
+
+    if (m_limitSwitchGauche.get() == true){ // set l'angle à -90
+
+    }
+
+
     SmartDashboard.putNumber("Turret/AngleDeg", getAngle());
   }
 }

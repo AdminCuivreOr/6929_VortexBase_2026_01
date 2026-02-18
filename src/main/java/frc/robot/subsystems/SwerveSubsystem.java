@@ -103,6 +103,10 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("LL X", mt1.pose.getX());
       SmartDashboard.putNumber("LL Y", mt1.pose.getY());
       SmartDashboard.putNumber("LL Yaw(deg)", mt1.pose.getRotation().getDegrees());
+
+      SmartDashboard.putNumber("SwerveX", swerveDrive.getPose().getX());
+      SmartDashboard.putNumber("SwerveY", swerveDrive.getPose().getY());
+      SmartDashboard.putNumber("SwerveYAW", swerveDrive.getPose().getRotation().getDegrees());
     }
   }
  

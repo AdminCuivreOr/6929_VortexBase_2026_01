@@ -29,10 +29,10 @@ public final class Constants {
 
     public static final int MOTOR_ID = 9;
 
-    public static final double ANGLE_TOLERANCE_DEG = 5;
-    public static final double ZERO_OFFSET_DEG = 0;
-    public static final double MIN_ANGLE_DEG = 0;
-    public static final double MAX_ANGLE_DEG = 180;
+    public static final int ANGLE_TOLERANCE_DEG = 5;
+    public static final int ZERO_OFFSET_DEG = 0;
+    public static final int MIN_ANGLE_DEG = -90;
+    public static final int MAX_ANGLE_DEG = 90;
 
 
   }
