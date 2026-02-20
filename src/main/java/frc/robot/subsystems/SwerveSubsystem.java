@@ -38,6 +38,8 @@ public class SwerveSubsystem extends SubsystemBase {
  
   private SwerveDrive swerveDrive;
  
+  public int tagCountLL = 0;
+
   public SwerveSubsystem() {
     try {
       // NOTE: Translation2d takes doubles in meters.
@@ -65,7 +67,8 @@ swerveDrive.addVisionMeasurement(
           mt1.timestampSeconds,
           VecBuilder.fill(.5, .5, 9999999)
       );
- 
+      tagCountLL = mt1.tagCount;
+
       SmartDashboard.putNumber("LL tagCount", mt1.tagCount);
       SmartDashboard.putNumber("LL X", mt1.pose.getX());
       SmartDashboard.putNumber("LL Y", mt1.pose.getY());

@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,12 +20,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
  
 import frc.robot.Constants;
+
+import frc.robot.LimelightHelpers;
  
 public class TurretSubsystem extends SubsystemBase {
  
   private final SparkMax m_motor =
       new SparkMax(Constants.TurretConstants.MOTOR_ID, MotorType.kBrushless);
- 
+  // Creates a PIDController with gains kP, kI, and kD
+  PIDController pid = new PIDController(Constants.TurretConstants.kP, 0,0);
 
   DigitalInput m_limitSwitchGauche = new DigitalInput(7);
   DigitalInput m_limitSwitchDroite = new DigitalInput(8);
@@ -70,7 +74,7 @@ public class TurretSubsystem extends SubsystemBase {
         Constants.TurretConstants.MAX_ANGLE_DEG
     );
  
-    double output = 0.15;
+    double output = pid.calculate(m_relEncoder.getPosition(), targetDeg);
     double position = getAngle();
     double erreur = targetDeg - position;
 
@@ -78,14 +82,15 @@ public class TurretSubsystem extends SubsystemBase {
      m_motor.set(output);
     }
     else if (erreur < -Constants.TurretConstants.ANGLE_TOLERANCE_DEG)  {
-     m_motor.set(-output);
+     m_motor.set(output);
     }
     else {
-    // si erreur plus grsnde que 5 moteur à 0,1, si plus petit que -5 moteur à -0,1 sinon moteur à 0
+    // si erreur plus grsnde que 5 moteur à 0.1, si plus petit que -5 moteur à -0.1 sinon moteur à 0
     m_motor.set(0);
     }
     SmartDashboard.putNumber("Turret/SetpointDeg", targetDeg);
     SmartDashboard.putNumber("Turret/erreur", erreur);
+    SmartDashboard.putNumber("Turret/Output", output);
 
 
   }

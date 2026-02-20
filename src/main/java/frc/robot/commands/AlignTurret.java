@@ -64,7 +64,13 @@ public class AlignTurret extends Command {
     Translation2d robotTarget = target.minus(pos.getTranslation()); // mauvais calcul ?
     Rotation2d angle = robotTarget.getAngle().minus(pos.getRotation()); // ou lui.
 
-    m_turret.moveToAngle(-angle.getDegrees());
+    if (m_swerve.tagCountLL > 0) {
+      m_turret.moveToAngle(-angle.getDegrees());
+    }
+    else {
+      m_turret.moveToAngle(0);
+    }
+    
     
 
 
