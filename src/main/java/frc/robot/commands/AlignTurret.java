@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.LimelightHelpers;
 
 import java.util.Optional;
 
@@ -14,12 +15,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class AlignTurret extends Command {
   private final TurretSubsystem m_turret;
   private final SwerveSubsystem m_swerve;
+
 
   /**
    * Creates a new ExampleCommand.
@@ -58,11 +61,14 @@ public class AlignTurret extends Command {
           System.out.println("aucune couleur d'alliance");
     }
 
-    Translation2d robotTarget = target.minus(pos.getTranslation());
-    Rotation2d angle = robotTarget.getAngle().minus(pos.getRotation());
+    Translation2d robotTarget = target.minus(pos.getTranslation()); // mauvais calcul ?
+    Rotation2d angle = robotTarget.getAngle().minus(pos.getRotation()); // ou lui.
 
-    m_turret.moveToAngle(angle.getDegrees());
+    m_turret.moveToAngle(-angle.getDegrees());
+    
 
+
+    SmartDashboard.putNumber("Turret/AngleRAWRobotTarget", angle.getDegrees());
   }
 
   // Called once the command ends or is interrupted.

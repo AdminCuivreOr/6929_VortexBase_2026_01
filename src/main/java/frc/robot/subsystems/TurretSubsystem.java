@@ -26,8 +26,8 @@ public class TurretSubsystem extends SubsystemBase {
       new SparkMax(Constants.TurretConstants.MOTOR_ID, MotorType.kBrushless);
  
 
-  DigitalInput m_limitSwitchGauche = new DigitalInput(0);
-  DigitalInput m_limitSwitchDroite = new DigitalInput(1);
+  DigitalInput m_limitSwitchGauche = new DigitalInput(7);
+  DigitalInput m_limitSwitchDroite = new DigitalInput(8);
 
 
   // Through-Bore connected to SparkFlex data port (duty-cycle absolute)
@@ -37,7 +37,7 @@ public class TurretSubsystem extends SubsystemBase {
  
   public TurretSubsystem() {
     var config = new SparkMaxConfig();
-    double degPerEncoderRotation = 463.80 / 360.0; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
+    double degPerEncoderRotation = 0.78; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
 
     config.encoder.positionConversionFactor(degPerEncoderRotation);
  
@@ -70,7 +70,7 @@ public class TurretSubsystem extends SubsystemBase {
         Constants.TurretConstants.MAX_ANGLE_DEG
     );
  
-    double output = 0.1;
+    double output = 0.15;
     double position = getAngle();
     double erreur = targetDeg - position;
 
@@ -85,6 +85,9 @@ public class TurretSubsystem extends SubsystemBase {
     m_motor.set(0);
     }
     SmartDashboard.putNumber("Turret/SetpointDeg", targetDeg);
+    SmartDashboard.putNumber("Turret/erreur", erreur);
+
+
   }
  
   public void stop() {
@@ -94,15 +97,22 @@ public class TurretSubsystem extends SubsystemBase {
  
   @Override
   public void periodic() {
-    if (m_limitSwitchDroite.get() == true){ // set l'angle à 90
-      
+      SmartDashboard.putNumber("Turret/AngleDeg", m_relEncoder.getPosition());
+     if (m_limitSwitchDroite.get() == true){ // set l'angle à 90
+   m_relEncoder.setPosition(Constants.TurretConstants.MAX_ANGLE_DEG);
     }
 
-    if (m_limitSwitchGauche.get() == true){ // set l'angle à -90
-
+    if (m_limitSwitchGauche.get() == false){ // set l'angle à -90
+ m_relEncoder.setPosition(Constants.TurretConstants.MIN_ANGLE_DEG);
     }
+   
+    
+    
+    SmartDashboard.putBoolean("limitSwitchDroite", m_limitSwitchDroite.get());
+    SmartDashboard.putBoolean("limitSwitchGauche", m_limitSwitchGauche.get());
 
 
-    SmartDashboard.putNumber("Turret/AngleDeg", getAngle());
+    SmartDashboard.putNumber("Turret/AngleDeg", getAngle()); 
+    SmartDashboard.putNumber("Turret/CurrentAngleDeg",m_relEncoder.getPosition());
   }
 }

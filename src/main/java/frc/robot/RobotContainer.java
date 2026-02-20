@@ -5,18 +5,23 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AlignTurret;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.io.File;
 
@@ -30,12 +35,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  private final TurretSubsystem turret = new TurretSubsystem();  //en minuscule 
 
   private boolean m_fieldOriented = true;
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
+
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final Joystick m_copilote = new Joystick(1);
+      
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -46,8 +55,8 @@ public class RobotContainer {
   }
 
    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> m_driverController.getLeftY() * 1, //Cette valeur vaut habituellement -1
-                                                                () -> m_driverController.getLeftX() * 1) //Cette valeur vaut habituellement -1
+                                                                () -> m_driverController.getLeftY() * -1, //Cette valeur vaut habituellement -1
+                                                                () -> m_driverController.getLeftX() * -1) //Cette valeur vaut habituellement -1
                                                             .withControllerRotationAxis(m_driverController::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
@@ -86,7 +95,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    
+    JoystickButton Turret = new JoystickButton(m_copilote, 1);  //en Majuscule
     
 
     new Trigger(m_exampleSubsystem::exampleCondition)
@@ -96,6 +105,9 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox cont roller's B button is pressed,
     // cancelling on release.<
+
+   Turret.whileTrue(new AlignTurret(turret, drivebase));
+
     
     m_driverController.start().onTrue(
     Commands.runOnce(() -> {
@@ -107,6 +119,7 @@ public class RobotContainer {
 
     })
 );
+
 
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }

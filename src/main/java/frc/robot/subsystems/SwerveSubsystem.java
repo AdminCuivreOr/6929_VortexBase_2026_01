@@ -41,7 +41,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     try {
       // NOTE: Translation2d takes doubles in meters.
-      Pose2d startingPose = new Pose2d(new Translation2d(1.0, 4.0), Rotation2d.fromDegrees(180));
+      Pose2d startingPose = new Pose2d(new Translation2d(1.0, 4.0), Rotation2d.fromDegrees(0));
  
       swerveDrive = new SwerveParser(directory).createSwerveDrive(
           Constants.MAX_SPEED,
@@ -57,6 +57,27 @@ public class SwerveSubsystem extends SubsystemBase {
  
   @Override
   public void periodic() {
+
+    LimelightHelpers.PoseEstimate mt1 =
+        LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME);
+swerveDrive.addVisionMeasurement(
+          mt1.pose,
+          mt1.timestampSeconds,
+          VecBuilder.fill(.5, .5, 9999999)
+      );
+ 
+      SmartDashboard.putNumber("LL tagCount", mt1.tagCount);
+      SmartDashboard.putNumber("LL X", mt1.pose.getX());
+      SmartDashboard.putNumber("LL Y", mt1.pose.getY());
+      SmartDashboard.putNumber("LL Yaw(deg)", mt1.pose.getRotation().getDegrees());
+
+      SmartDashboard.putNumber("SwerveX", swerveDrive.getPose().getX());
+      SmartDashboard.putNumber("SwerveY", swerveDrive.getPose().getY());
+      SmartDashboard.putNumber("SwerveYAW", swerveDrive.getPose().getRotation().getDegrees());
+
+
+
+
  
     // 1) Update YAGSL odometry every loop (this is important)
     // YAGSL docs / javadocs: updateOdometry should be run every loop. :contentReference[oaicite:4]{index=4}
@@ -67,6 +88,8 @@ public class SwerveSubsystem extends SubsystemBase {
  
     // 3) Add Limelight Robot Localization as vision corrections (MegaTag1 style)
     addLimelightVisionMeasurementMegaTag1();
+
+
   }
  
   private void addLimelightVisionMeasurementMegaTag1() {
