@@ -8,7 +8,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignTurret;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import swervelib.SwerveInputStream;
@@ -36,6 +38,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   private final TurretSubsystem turret = new TurretSubsystem();  //en minuscule 
+  private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
 
   private boolean m_fieldOriented = true;
   
@@ -96,7 +99,7 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     JoystickButton Turret = new JoystickButton(m_copilote, 1);  //en Majuscule
-    
+    JoystickButton Shooter = new JoystickButton(m_copilote, 2);
 
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -107,7 +110,7 @@ public class RobotContainer {
     // cancelling on release.<
 
    Turret.whileTrue(new AlignTurret(turret, drivebase));
-
+   Shooter.whileTrue(new ShooterCommand(m_Shooter, 0.55) );
     
     m_driverController.start().onTrue(
     Commands.runOnce(() -> {
