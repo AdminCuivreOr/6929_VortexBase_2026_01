@@ -9,9 +9,11 @@ import frc.robot.commands.AlignTurret;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.TubeCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TubeSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.encoders.SwerveAbsoluteEncoder;
@@ -39,6 +41,7 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   private final TurretSubsystem turret = new TurretSubsystem();  //en minuscule 
   private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
+  private final TubeSubsystem tube = new TubeSubsystem();
 
   private boolean m_fieldOriented = true;
   
@@ -100,6 +103,7 @@ public class RobotContainer {
 
     JoystickButton Turret = new JoystickButton(m_copilote, 1);  //en Majuscule
     JoystickButton Shooter = new JoystickButton(m_copilote, 2);
+    JoystickButton Tube = new JoystickButton(m_copilote, 3);
 
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -108,9 +112,10 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox cont roller's B button is pressed,
     // cancelling on release.<
-
+   
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, 0.55) );
+   Tube.whileTrue(new TubeCommand(tube, 0.25, 0.55));
     
     m_driverController.start().onTrue(
     Commands.runOnce(() -> {
