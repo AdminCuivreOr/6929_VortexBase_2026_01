@@ -1,32 +1,34 @@
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TubeSubsystem;
 
-public class ShooterCommand extends Command {
+public class TubeCommand extends Command {
 
-    private final ShooterSubsystem shooter;
+    private final TubeSubsystem tube;
     private final double speed;
+    private final double speedouter;
 
-    public ShooterCommand(ShooterSubsystem shooter, double speed) {
-        this.shooter = shooter;
+    public TubeCommand(TubeSubsystem tube, double speed, double speedouter) {
+        this.tube = tube;
         this.speed = speed;
+        this.speedouter = speedouter;
 
-        addRequirements(shooter);
+        addRequirements(tube);
     }
 
     @Override
-    public void initialize() {
-        shooter.drive(speed);
+    public void execute() {
+        tube.drive(speed, speedouter);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stop();
+        tube.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return false; // tourne tant que le bouton est maintenu
+        return false;
     }
 }
