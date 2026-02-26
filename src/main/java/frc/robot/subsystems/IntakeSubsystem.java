@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class IntakeSubsystem extends SubsystemBase {
  
     private final SparkFlex intakeLeft =
-            new SparkFlex(24, MotorType.kBrushless);
+            new SparkFlex(11, MotorType.kBrushless);
  
    // private final SparkFlex intakeRight =
    //        new SparkFlex(22, MotorType.kBrushless);

@@ -9,16 +9,16 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class TubeSubsystem extends SubsystemBase {
 
     private final SparkFlex underTube =
-            new SparkFlex(20, MotorType.kBrushless);
+            new SparkFlex(12, MotorType.kBrushless);
 
     private final SparkFlex outer =
-            new SparkFlex(21, MotorType.kBrushless);
+            new SparkFlex(13, MotorType.kBrushless);
 
    // private final SparkFlex shooterRight =
     //        new SparkFlex(22, MotorType.kBrushless);
 
     public TubeSubsystem() {
-        // Inverser un moteur pour qu'ils tournent dans le même sens
+        // Inverser un moteur pour qu'ils tournent dans le même sens#
     }
 
     public void drive(double speed,double speedouter) {

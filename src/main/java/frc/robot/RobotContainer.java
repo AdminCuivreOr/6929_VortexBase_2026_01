@@ -8,9 +8,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignTurret;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeCommand;
+//import frc.robot.commands.MoveActuatorCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TubeCommand;
+//import frc.robot.subsystems.ActuatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TubeSubsystem;
@@ -42,6 +46,11 @@ public class RobotContainer {
   private final TurretSubsystem turret = new TurretSubsystem();  //en minuscule 
   private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
   private final TubeSubsystem tube = new TubeSubsystem();
+  private final IntakeSubsystem intake = new IntakeSubsystem();
+
+  //private final ActuatorSubsystem actuator = new ActuatorSubsystem();
+
+
 
   private boolean m_fieldOriented = true;
   
@@ -104,6 +113,12 @@ public class RobotContainer {
     JoystickButton Turret = new JoystickButton(m_copilote, 1);  //en Majuscule
     JoystickButton Shooter = new JoystickButton(m_copilote, 2);
     JoystickButton Tube = new JoystickButton(m_copilote, 3);
+    JoystickButton Intake = new JoystickButton(m_copilote, 4);
+
+  //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7
+  //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8
+
+  
 
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -116,6 +131,12 @@ public class RobotContainer {
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, 0.55) );
    Tube.whileTrue(new TubeCommand(tube, 0.25, 0.55));
+   Intake.whileTrue(new IntakeCommand(intake, 1.0));
+
+  // ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
+  // ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
+
+
     
     m_driverController.start().onTrue(
     Commands.runOnce(() -> {

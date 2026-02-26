@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class ShooterSubsystem extends SubsystemBase {
 
     private final SparkFlex shooterLeft =
-            new SparkFlex(23, MotorType.kBrushless);
+            new SparkFlex(10, MotorType.kBrushless);
 
    // private final SparkFlex shooterRight =
     //        new SparkFlex(22, MotorType.kBrushless);
