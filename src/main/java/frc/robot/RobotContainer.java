@@ -4,21 +4,19 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AlignTurret;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeCommand;
-//import frc.robot.commands.MoveActuatorCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.TubeCommand;
-//import frc.robot.subsystems.ActuatorSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.TubeSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.Autre.ExampleCommand;
+import frc.robot.Autre.ExampleSubsystem;
+import frc.robot.MainConstants.OperatorConstants;
+import frc.robot.Intake.IntakeCommand;
+import frc.robot.Intake.IntakeSubsystem;
+import frc.robot.Shooter.ShooterCommand;
+import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.SwerveAndAuto.Autos;
+import frc.robot.SwerveAndAuto.SwerveSubsystem;
+import frc.robot.Tube.TubeCommand;
+import frc.robot.Tube.TubeSubsystem;
+import frc.robot.Turret.AlignTurret;
+import frc.robot.Turret.TurretSubsystem;
 import swervelib.SwerveInputStream;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -110,10 +108,10 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    JoystickButton Turret = new JoystickButton(m_copilote, 1);  //en Majuscule
-    JoystickButton Shooter = new JoystickButton(m_copilote, 2);
-    JoystickButton Tube = new JoystickButton(m_copilote, 3);
-    JoystickButton Intake = new JoystickButton(m_copilote, 4);
+    JoystickButton Turret = new JoystickButton(m_copilote, 1); //a //en Majuscule
+    JoystickButton Shooter = new JoystickButton(m_copilote, 2);//b
+    JoystickButton Tube = new JoystickButton(m_copilote, 3);//x
+    JoystickButton Intake = new JoystickButton(m_copilote, 4);//y
 
   //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7
   //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8
@@ -129,9 +127,9 @@ public class RobotContainer {
     // cancelling on release.<
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
-   Shooter.whileTrue(new ShooterCommand(m_Shooter, 0.55) );
+   Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
    Tube.whileTrue(new TubeCommand(tube, 0.25, 0.55));
-   Intake.whileTrue(new IntakeCommand(intake, 1.0));
+   Intake.whileTrue(new IntakeCommand(intake, 0.5));
 
   // ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
   // ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter

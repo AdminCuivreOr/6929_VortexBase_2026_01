@@ -16,7 +16,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 //import swervelib.math.Matter;
 
-public final class Constants {
+public final class MainConstants {
 
     public static final double MAX_SPEED  = Units.feetToMeters(4.5);
 
@@ -25,17 +25,5 @@ public final class Constants {
     public static final double DEADBAND = 0.05; 
   }
 
-  public static class TurretConstants {
 
-    public static final int MOTOR_ID = 9;
-
-    public static final int ANGLE_TOLERANCE_DEG = 3;
-    public static final int ZERO_OFFSET_DEG = 0;
-    public static final int MIN_ANGLE_DEG = -100;
-    public static final int MAX_ANGLE_DEG = 100; // angle max / à remettre à 90 pour le vrai robot
-
-    public static final double kP = 0.015;
-
-
-  }
 }

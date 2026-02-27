@@ -1,14 +1,13 @@
-package frc.robot.subsystems;
+package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax; 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final SparkFlex shooterLeft =
+    private final SparkFlex shooter =
             new SparkFlex(10, MotorType.kBrushless);
 
    // private final SparkFlex shooterRight =
@@ -19,12 +18,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void drive(double speed) {
-        shooterLeft.set(speed);
+        shooter.set(speed);
         //shooterRight.set(speed);
     }
 
     public void stop() {
-        shooterLeft.set(0);
+        shooter.set(0);
        // shooterRight.set(0);
     }
 }

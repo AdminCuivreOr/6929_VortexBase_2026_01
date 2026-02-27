@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.Turret;
 
  import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
@@ -19,16 +19,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
  import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
  
-import frc.robot.Constants;
+import frc.robot.MainConstants;
 
 import frc.robot.LimelightHelpers;
  
 public class TurretSubsystem extends SubsystemBase {
  
   private final SparkMax m_motor =
-      new SparkMax(Constants.TurretConstants.MOTOR_ID, MotorType.kBrushless);
+      new SparkMax(TurretConstants.MOTOR_ID, MotorType.kBrushless);
   // Creates a PIDController with gains kP, kI, and kD
-  PIDController pid = new PIDController(Constants.TurretConstants.kP, 0,0);
+  PIDController pid = new PIDController(TurretConstants.kP, 0,0);
 
   DigitalInput m_limitSwitchGauche = new DigitalInput(7);
   DigitalInput m_limitSwitchDroite = new DigitalInput(8);
@@ -60,7 +60,7 @@ public class TurretSubsystem extends SubsystemBase {
     double rawDeg = m_relEncoder.getPosition(); // pas vraiment des degrés, valeur encodeur
  
     // Apply zero offset (calibrated)
-    double adjusted = rawDeg - Constants.TurretConstants.ZERO_OFFSET_DEG;
+    double adjusted = rawDeg - TurretConstants.ZERO_OFFSET_DEG;
 
     return adjusted;
   }
@@ -70,18 +70,18 @@ public class TurretSubsystem extends SubsystemBase {
     // Optional: prevent cable wrap (strongly recommended)
     targetDeg = MathUtil.clamp(
         targetDeg,
-        Constants.TurretConstants.MIN_ANGLE_DEG,
-        Constants.TurretConstants.MAX_ANGLE_DEG
+        TurretConstants.MIN_ANGLE_DEG,
+        TurretConstants.MAX_ANGLE_DEG
     );
  
     double output = pid.calculate(m_relEncoder.getPosition(), targetDeg);
     double position = getAngle();
     double erreur = targetDeg - position;
 
-    if (erreur > Constants.TurretConstants.ANGLE_TOLERANCE_DEG) {
+    if (erreur > TurretConstants.ANGLE_TOLERANCE_DEG) {
      m_motor.set(output);
     }
-    else if (erreur < -Constants.TurretConstants.ANGLE_TOLERANCE_DEG)  {
+    else if (erreur < -TurretConstants.ANGLE_TOLERANCE_DEG)  {
      m_motor.set(output);
     }
     else {
@@ -104,11 +104,11 @@ public class TurretSubsystem extends SubsystemBase {
   public void periodic() {
       SmartDashboard.putNumber("Turret/AngleDeg", m_relEncoder.getPosition());
      if (m_limitSwitchDroite.get() == true){ // set l'angle à 90
-   m_relEncoder.setPosition(Constants.TurretConstants.MAX_ANGLE_DEG);
+   m_relEncoder.setPosition(TurretConstants.MAX_ANGLE_DEG);
     }
 
     if (m_limitSwitchGauche.get() == false){ // set l'angle à -90
- m_relEncoder.setPosition(Constants.TurretConstants.MIN_ANGLE_DEG);
+ m_relEncoder.setPosition(TurretConstants.MIN_ANGLE_DEG);
     }
    
     

@@ -1,7 +1,7 @@
-package frc.robot.commands;
+package frc.robot.Tube;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.TubeSubsystem;
+import frc.robot.Tube.TubeSubsystem;
 
 public class TubeCommand extends Command {
 

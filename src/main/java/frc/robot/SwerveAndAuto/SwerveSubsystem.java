@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
  
-package frc.robot.subsystems;
+package frc.robot.SwerveAndAuto;
  
-import frc.robot.Constants;
+import frc.robot.MainConstants;
  
 import java.io.File;
 import java.util.function.Supplier;
@@ -46,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
       Pose2d startingPose = new Pose2d(new Translation2d(1.0, 4.0), Rotation2d.fromDegrees(0));
  
       swerveDrive = new SwerveParser(directory).createSwerveDrive(
-          Constants.MAX_SPEED,
+          MainConstants.MAX_SPEED,
           startingPose
       );
     } catch (Exception e) {

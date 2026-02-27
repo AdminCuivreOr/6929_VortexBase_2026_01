@@ -1,15 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot.Intake;
  
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
  
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
  
 public class IntakeSubsystem extends SubsystemBase {
  
-    private final SparkFlex intakeLeft =
+    private final SparkFlex intakeRight =
             new SparkFlex(11, MotorType.kBrushless);
+    //private final SparkFlex intakeLeft =
+       //     new SparkFlex(16, MotorType.kBrushless);
  
    // private final SparkFlex intakeRight =
    //        new SparkFlex(22, MotorType.kBrushless);
@@ -19,12 +20,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
  
     public void drive(double speed) {
-        intakeLeft.set(speed);
-        //intakeRight.set(speed);
+        intakeRight.set(speed);
+        //intakeLeft.set(-speed);
     }
  
     public void stop() {
-        intakeLeft.set(0);
-       // intakeRight.set(0);
+        intakeRight.set(0);
+       // intakeLeft.set(0);
     }
 }
