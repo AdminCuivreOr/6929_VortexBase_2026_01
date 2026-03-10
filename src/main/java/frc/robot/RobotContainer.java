@@ -11,6 +11,8 @@ import frc.robot.Intake.IntakeCommand;
 import frc.robot.Intake.IntakeSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.Actuator.ActuatorSubsystem;
+import frc.robot.Shooter.Actuator.MoveActuatorCommand;
 import frc.robot.SwerveAndAuto.Autos;
 import frc.robot.SwerveAndAuto.SwerveSubsystem;
 import frc.robot.Tube.TubeCommand;
@@ -46,7 +48,7 @@ public class RobotContainer {
   private final TubeSubsystem tube = new TubeSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
 
-  //private final ActuatorSubsystem actuator = new ActuatorSubsystem();
+  private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
 
 
@@ -113,9 +115,9 @@ public class RobotContainer {
     JoystickButton Tube = new JoystickButton(m_copilote, 3);//x
     JoystickButton Intake = new JoystickButton(m_copilote, 4);//y
 
-  //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7
-  //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8
-
+    JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7 bumber gauche
+    JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8 bumber droit
+    JoystickButton ActuatorPos45 = new JoystickButton(m_copilote, 8);
   
 
     new Trigger(m_exampleSubsystem::exampleCondition)
@@ -131,9 +133,10 @@ public class RobotContainer {
    Tube.whileTrue(new TubeCommand(tube, 0.25, 0.55));
    Intake.whileTrue(new IntakeCommand(intake, 0.5));
 
-  // ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
-  // ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
-
+   ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
+   ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
+   ActuatorPos45.whileTrue(actuator.setPositionPercentCommand(50));
+   
 
     
     m_driverController.start().onTrue(
@@ -146,8 +149,8 @@ public class RobotContainer {
 
     })
 );
-
-
+    
+    
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 

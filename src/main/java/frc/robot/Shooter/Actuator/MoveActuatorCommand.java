@@ -1,8 +1,8 @@
 package frc.robot.Shooter.Actuator;
-/*package frc.robot.commands;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ActuatorSubsystem;
+import frc.robot.Shooter.Actuator.ActuatorSubsystem;;
 
 public class MoveActuatorCommand extends Command {
     private final ActuatorSubsystem m_actuator;
@@ -27,4 +27,4 @@ public class MoveActuatorCommand extends Command {
     public boolean isFinished() {
         return false; // continue tant que le bouton est appuyé
     }
-} */
+} 
