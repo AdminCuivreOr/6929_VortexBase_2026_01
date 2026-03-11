@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.io.File;
 
@@ -41,9 +42,11 @@ import java.io.File;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
+  // Moteurs en minuscule 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
-  private final TurretSubsystem turret = new TurretSubsystem();  //en minuscule 
+  private final TurretSubsystem turret = new TurretSubsystem();   
   private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
   private final TubeSubsystem tube = new TubeSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
@@ -70,8 +73,8 @@ public class RobotContainer {
   }
 
    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> m_driverController.getLeftY() * -1, //Cette valeur vaut habituellement -1
-                                                                () -> m_driverController.getLeftX() * -1) //Cette valeur vaut habituellement -1
+                                                                () -> m_driverController.getLeftY() * -1, 
+                                                                () -> m_driverController.getLeftX() * -1) 
                                                             .withControllerRotationAxis(m_driverController::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
@@ -110,14 +113,17 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    JoystickButton Turret = new JoystickButton(m_copilote, 1); //a //en Majuscule
-    JoystickButton Shooter = new JoystickButton(m_copilote, 2);//b
-    JoystickButton Tube = new JoystickButton(m_copilote, 3);//x
-    JoystickButton Intake = new JoystickButton(m_copilote, 4);//y
+    //Noms de mécasnismes activés en Majuscule
+
+    JoystickButton Turret = new JoystickButton(m_copilote, 1); // a 
+    JoystickButton Shooter = new JoystickButton(m_copilote, 2); // b
+    JoystickButton Tube = new JoystickButton(m_copilote, 3); // x
+    JoystickButton Intake = new JoystickButton(m_copilote, 4); // y
 
     JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7 bumber gauche
     JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8 bumber droit
-    JoystickButton ActuatorPos45 = new JoystickButton(m_copilote, 8);
+    POVButton ActuatorPos50 = new POVButton(m_copilote, 90);// start
+
   
 
     new Trigger(m_exampleSubsystem::exampleCondition)
@@ -135,11 +141,11 @@ public class RobotContainer {
 
    ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
    ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
-   ActuatorPos45.whileTrue(actuator.setPositionPercentCommand(50));
+   ActuatorPos50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
+   ActuatorPos50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
    
-
     
-    m_driverController.start().onTrue(
+    m_driverController.start().onTrue( // Démarrer FO (FC)
     Commands.runOnce(() -> {
       m_fieldOriented = !m_fieldOriented;
       SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
@@ -150,7 +156,7 @@ public class RobotContainer {
     })
 );
     
-    
+       
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 

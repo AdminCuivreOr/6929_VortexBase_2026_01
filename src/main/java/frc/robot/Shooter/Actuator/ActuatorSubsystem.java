@@ -3,6 +3,7 @@ package frc.robot.Shooter.Actuator;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ActuatorSubsystem extends SubsystemBase {
@@ -16,7 +17,7 @@ public class ActuatorSubsystem extends SubsystemBase {
         m_actuator.setAngle(currentAngle); // position initiale
     }
 
-    /* Étend l'actionneur à sa position maximale 
+    /* Étend l'actionneur à sa position maximale */
     public void extend() {
         currentAngle = MAX_ANGLE;
         m_actuator.setAngle(currentAngle);
@@ -40,6 +41,14 @@ public class ActuatorSubsystem extends SubsystemBase {
         double percent = (currentAngle - MIN_ANGLE) / (MAX_ANGLE - MIN_ANGLE);
         setPositionPercent(percent + deltaPercent);
     }
+
+    public Command setPositionPercentCommand(double percent) {
+        return runOnce(
+        () -> {
+          setPositionPercent(percent);
+        });
+    }
+
 
     @Override
     public void periodic() {
