@@ -1,60 +1,65 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Intake.BrasIntake;
-
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj2.command.Command;
+ 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+ 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import frc.robot.Intake.IntakeConstants;
+ 
 public class BrasIntakeSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-
-  private final SparkFlex m_brasIntake = 
-      new SparkFlex(14, MotorType.kBrushless);
-
-  private final RelativeEncoder m_brasEncodeur = m_brasIntake.getEncoder();
-  
-
-  public BrasIntakeSubsystem() {
-    m_brasIntake.getEncoder().setPosition(0);
-  }
-
-
-  public void resetEncoder() {
-      // Resets the encoder's position to zero
-      m_brasEncodeur.setPosition(0);
-  }
-
-  public double getPosition() {
-      return m_brasEncodeur.getPosition();
-  }
-  
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
-
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
-}
+    private final SparkMax m_BrasintakeMotor = new SparkMax(IntakeConstants.motorID, MotorType.kBrushless);
+    private final RelativeEncoder m_BrasintakeEncoder = m_BrasintakeMotor.getEncoder();
+    private final PIDController m_BrasintakePID = new PIDController(IntakeConstants.kp, IntakeConstants.ki, IntakeConstants.kd);
+    
+private double setpoint;
+    private double command;
+ 
+    public BrasIntakeSubsystem() {
+        m_BrasintakePID.setTolerance(IntakeConstants.tolerance);
+        m_BrasintakeMotor.getEncoder().setPosition(0);
+    }
+ 
+    public void resetEncoder() {
+        // Resets the encoder's position to zero
+        m_BrasintakeEncoder.setPosition(0);
+    }
+ 
+    public double getPosition() {
+        return m_BrasintakeEncoder.getPosition();
+    }
+ 
+    public void setPositionTarget(double sp){
+        setpoint = sp;
+    }
+ 
+    public boolean atSetpoint(){
+        return m_BrasintakePID.atSetpoint();
+    }
+ 
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Voltage_Intake_motor", m_BrasintakeMotor.getOutputCurrent());
+        SmartDashboard.putNumber("setpoint_Intake", setpoint);
+        SmartDashboard.putNumber("currentposIntake", getPosition());
+        SmartDashboard.putNumber("commandIntake", command);
+        SmartDashboard.putNumber("Intake_speed", MathUtil.clamp((command + IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
+        SmartDashboard.putNumber("ALternate_Intakespeed", MathUtil.clamp((IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
+        SmartDashboard.putNumber("intake Position (Rotations)", getPosition());
+        if(RobotState.isEnabled()){
+            command = m_BrasintakePID.calculate(m_BrasintakeEncoder.getPosition(), setpoint);
+        
+           
+                    m_BrasintakeMotor.set(MathUtil.clamp((command + IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
+                
+            }
+        }
+        
+ 
+       
+    }

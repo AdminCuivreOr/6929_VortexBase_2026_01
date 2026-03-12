@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.Intake.BrasIntake.Brasintakedefault;
+import frc.robot.Intake.BrasIntake.Brasintakedown;
+import frc.robot.Intake.BrasIntake.BrasIntakeSubsystem;
 import frc.robot.Autre.ExampleCommand;
 import frc.robot.Autre.ExampleSubsystem;
 import frc.robot.MainConstants.OperatorConstants;
@@ -13,6 +16,8 @@ import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.Actuator.ActuatorSubsystem;
 import frc.robot.Shooter.Actuator.MoveActuatorCommand;
+import frc.robot.Climb.ClimbSubsystem;
+import frc.robot.Climb.ClimbingCommand;
 import frc.robot.SwerveAndAuto.Autos;
 import frc.robot.SwerveAndAuto.SwerveSubsystem;
 import frc.robot.Tube.TubeCommand;
@@ -50,6 +55,8 @@ public class RobotContainer {
   private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
   private final TubeSubsystem tube = new TubeSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final ClimbSubsystem m_grimpeur = new ClimbSubsystem();
+  private final BrasIntakeSubsystem m_Brasintake = new BrasIntakeSubsystem();
 
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
@@ -120,9 +127,13 @@ public class RobotContainer {
     JoystickButton Tube = new JoystickButton(m_copilote, 3); // x
     JoystickButton Intake = new JoystickButton(m_copilote, 4); // y
 
-    JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bouton 7 bumber gauche
-    JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bouton 8 bumber droit
-    POVButton ActuatorPos50 = new POVButton(m_copilote, 90);// start
+    JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
+    JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
+    POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Haut 
+    POVButton GrimpeurUP = new POVButton(m_copilote, 0); // Droite
+    POVButton GrimpeurDOWN = new POVButton(m_copilote, 180); // Gauche
+    JoystickButton Brasintakedefault = new JoystickButton(m_copilote, 9);
+    JoystickButton Brasintakedown = new JoystickButton(m_copilote, 10);
 
   
 
@@ -136,14 +147,20 @@ public class RobotContainer {
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
-   Tube.whileTrue(new TubeCommand(tube, 0.25, 0.55));
-   Intake.whileTrue(new IntakeCommand(intake, 0.5));
+   Tube.whileTrue(new TubeCommand(tube, 0.5, 0.55));
+   Intake.whileTrue(new IntakeCommand(intake, -1.0))
+  ;
 
    ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
    ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
    ActuatorPos50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
    ActuatorPos50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
    
+   GrimpeurUP.whileTrue(new ClimbingCommand(m_grimpeur, 1)); // monte Grimpeur
+   GrimpeurDOWN.whileTrue(new ClimbingCommand(m_grimpeur, -1)); // descend Grimpeur
+
+   Brasintakedefault.whileTrue(new Brasintakedown(m_Brasintake));
+   Brasintakedown.whileTrue(new Brasintakedefault(m_Brasintake));
     
     m_driverController.start().onTrue( // Démarrer FO (FC)
     Commands.runOnce(() -> {
@@ -173,3 +190,4 @@ public class RobotContainer {
     return Autos.exampleAuto(m_exampleSubsystem);
   }
 }
+

@@ -1,27 +1,27 @@
-package frc.robot.Intake;
+package frc.robot.Climb;
 import edu.wpi.first.wpilibj2.command.Command;
 
  
-public class IntakeCommand extends Command {
+public class ClimbingCommand extends Command {
  
-    private final IntakeSubsystem intake;
+    private final ClimbSubsystem climb;
     private final double speed;
  
-    public IntakeCommand(IntakeSubsystem intake, double speed) {
-        this.intake = intake;
+    public ClimbingCommand(ClimbSubsystem climb, double speed) {
+        this.climb = climb;
         this.speed = speed;
  
-        addRequirements(intake);
+        addRequirements(climb);
     }
  
     @Override
     public void execute() {
-        intake.drive(speed);
+        climb.drive(speed);
     }
  
     @Override
     public void end(boolean interrupted) {
-        intake.stop();
+        climb.stop();
     }
  
     @Override
