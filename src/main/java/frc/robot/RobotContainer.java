@@ -63,6 +63,7 @@ public class RobotContainer {
 
 
   private boolean m_fieldOriented = true;
+  private double speedMult = 1.0;
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -80,8 +81,8 @@ public class RobotContainer {
   }
 
    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> m_driverController.getLeftY() * -1, 
-                                                                () -> m_driverController.getLeftX() * -1) 
+                                                                () -> m_driverController.getLeftY() * -1 * speedMult, 
+                                                                () -> m_driverController.getLeftX() * -1 * speedMult) 
                                                             .withControllerRotationAxis(m_driverController::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
@@ -129,9 +130,9 @@ public class RobotContainer {
 
     JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
     JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
-    POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Haut 
-    POVButton GrimpeurUP = new POVButton(m_copilote, 0); // Droite
-    POVButton GrimpeurDOWN = new POVButton(m_copilote, 180); // Gauche
+    POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Droite
+    POVButton GrimpeurUP = new POVButton(m_copilote, 0); // Haut
+    POVButton GrimpeurDOWN = new POVButton(m_copilote, 180); // Bas
     JoystickButton Brasintakedefault = new JoystickButton(m_copilote, 9);
     JoystickButton Brasintakedown = new JoystickButton(m_copilote, 10);
 
@@ -148,7 +149,7 @@ public class RobotContainer {
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
    Tube.whileTrue(new TubeCommand(tube, 0.5, 0.55));
-   Intake.whileTrue(new IntakeCommand(intake, -1.0))
+   Intake.whileTrue(new IntakeCommand(intake, -0.3))
   ;
 
    ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
@@ -167,12 +168,14 @@ public class RobotContainer {
       m_fieldOriented = !m_fieldOriented;
       SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
 
-
-
-
     })
-);
-    
+    );
+
+    m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
+      speedMult = 0.5; // Si bumber gauche maintenu : Vitesse lente
+    })).onFalse(Commands.runOnce(() -> {
+      speedMult = 1.0; // Si bumber gauche relaché : Vitesse maximale
+    }));
        
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
