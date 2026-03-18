@@ -8,7 +8,8 @@ import frc.robot.MainConstants;
  
 import java.io.File;
 import java.util.function.Supplier;
- 
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +26,12 @@ import swervelib.parser.SwerveParser;
  
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
- 
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 // Limelight helper (add LimelightHelpers.java to your project OR vendor dep)
 import frc.robot.LimelightHelpers;
  
@@ -54,6 +60,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
  
     // Your original setting
+    setupPathPlanner();
     swerveDrive.setHeadingCorrection(false);
   }
  
@@ -165,4 +172,55 @@ swerveDrive.addVisionMeasurement(
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
   }
+
+  public void zeroHeading() {
+    m_gyro.reset(); // Remet l'angle du NavX à zéro
+    SmartDashboard.putNumber("NavX-Yaw", 0);
+  }
+
+    // ---------------- PATHPLANNER ----------------
+
+    public void setupPathPlanner() {
+        try {
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            final boolean enableFeedforward = true;
+
+            AutoBuilder.configure(
+                    swerveDrive::getPose,
+                    swerveDrive::resetOdometry,
+                    swerveDrive::getRobotVelocity,
+
+                    (speedsRobotRelative, moduleFeedForwards) -> {
+                        if (enableFeedforward) {
+                            swerveDrive.drive(
+                                    speedsRobotRelative,
+                                    swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+                                    moduleFeedForwards.linearForces()
+                            );
+                        } else {
+                            swerveDrive.setChassisSpeeds(speedsRobotRelative);
+                        }
+                    },
+
+                    new PPHolonomicDriveController(
+                            new PIDConstants(1.0, 0.0, 0.0),
+                            new PIDConstants(1.0, 0.0, 0.0)
+                    ),
+
+                    config,
+
+                    // 🔥 Flip path si RED
+                    () -> DriverStation.getAlliance()
+                            .map(a -> a == DriverStation.Alliance.Red)
+                            .orElse(false),
+
+                    this
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

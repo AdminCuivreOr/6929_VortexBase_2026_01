@@ -4,41 +4,87 @@
 
 package frc.robot;
 
-import frc.robot.Intake.BrasIntake.Brasintakedefault;
-import frc.robot.Intake.BrasIntake.Brasintakedown;
-import frc.robot.Intake.BrasIntake.BrasIntakeSubsystem;
-import frc.robot.Autre.ExampleCommand;
-import frc.robot.Autre.ExampleSubsystem;
-import frc.robot.MainConstants.OperatorConstants;
-import frc.robot.Intake.IntakeCommand;
-import frc.robot.Intake.IntakeSubsystem;
-import frc.robot.Shooter.ShooterCommand;
-import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Shooter.Actuator.ActuatorSubsystem;
-import frc.robot.Shooter.Actuator.MoveActuatorCommand;
-import frc.robot.Climb.ClimbSubsystem;
-import frc.robot.Climb.ClimbingCommand;
-import frc.robot.SwerveAndAuto.Autos;
-import frc.robot.SwerveAndAuto.SwerveSubsystem;
-import frc.robot.Tube.TubeCommand;
-import frc.robot.Tube.TubeSubsystem;
-import frc.robot.Turret.AlignTurret;
-import frc.robot.Turret.TurretSubsystem;
-import swervelib.SwerveInputStream;
-import swervelib.encoders.SwerveAbsoluteEncoder;
+// PathPlanner
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+// WPILib - Math & Geometry
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
+
+// WPILib - Core
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotBase;
+
+// WPILib - Dashboard
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// WPILib - Command-based
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+
+// WPILib - Input
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+// Java
 import java.io.File;
 
+// SwerveLib
+import swervelib.SwerveInputStream;
+import swervelib.encoders.SwerveAbsoluteEncoder;
+
+// Robot - Constants
+import frc.robot.MainConstants;
+import frc.robot.MainConstants.OperatorConstants;
+
+// Robot - Swerve & Auto
+import frc.robot.SwerveAndAuto.SwerveSubsystem;
+import frc.robot.SwerveAndAuto.Autos;
+
+// Robot - Intake
+import frc.robot.Intake.IntakeSubsystem;
+import frc.robot.Intake.IntakeCommand;
+import frc.robot.Intake.BrasIntake.BrasIntakeSubsystem;
+import frc.robot.Intake.BrasIntake.Brasintakedefault;
+import frc.robot.Intake.BrasIntake.Brasintakedown;
+
+// Robot - Shooter
+import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.ShooterCommand;
+import frc.robot.Shooter.Actuator.ActuatorSubsystem;
+import frc.robot.Shooter.Actuator.MoveActuatorCommand;
+
+// Robot - Tube
+import frc.robot.Tube.TubeSubsystem;
+import frc.robot.Tube.TubeCommand;
+
+// Robot - Turret
+import frc.robot.Turret.TurretSubsystem;
+import frc.robot.Turret.AlignTurret;
+
+// Robot - Climb
+import frc.robot.Climb.ClimbSubsystem;
+import frc.robot.Climb.ClimbingCommand;
+
+// Robot - Exemple
+import frc.robot.Autre.ExampleCommand;
+import frc.robot.Autre.ExampleSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -60,7 +106,14 @@ public class RobotContainer {
 
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
+  //path planner command
+ private final Command shooterCommand = new ShooterCommand(m_Shooter, -0.55).withTimeout(5.0);
+ private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(5.0);
+ private final Command IntakeCommand = new IntakeCommand(intake, 0.30).withTimeout(5.0);
 
+
+  // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
+  private final SendableChooser<Command> autoChooser;
 
   private boolean m_fieldOriented = true;
   private double speedMult = 1.0;
@@ -74,10 +127,20 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    //NamedCommand for path planner
+   NamedCommands.registerCommand("Shooter", shooterCommand);
+   NamedCommands.registerCommand("AlignTurret", AlignTurret);
     // Configure the trigger bindings
     configureBindings();
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
+
+    //Have the autoChooser pull in all PathPlanner autos as options
+    autoChooser = AutoBuilder.buildAutoChooser();
+    //Set the default auto (do nothing) 
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
+    //Put the autoChooser on the SmartDashboard
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -145,6 +208,9 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox cont roller's B button is pressed,
     // cancelling on release.<
+      m_driverController.back().onTrue(
+    new InstantCommand(() -> drivebase.zeroHeading(), drivebase)
+);
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
@@ -181,16 +247,17 @@ public class RobotContainer {
   }
 
 
-
-
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
+   * Get the path follower with events.
    *
-   * @return the command to run in autonomous
+   * @param pathName PathPlanner path name.
+   * @return {@link AutoBuilder#followPath(PathPlannerPath)} path command.
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+  
+  public Command getAutonomousCommand()
+  {
+    // Pass in the selected auto from the SmartDashboard as our desired autnomous commmand 
+    return autoChooser.getSelected();
   }
 }
 
