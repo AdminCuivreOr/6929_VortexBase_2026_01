@@ -30,11 +30,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // WPILib - Command-based
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-
+import edu.wpi.first.wpilibj2.command.RunCommand;
 // WPILib - Input
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -118,6 +119,7 @@ public class RobotContainer {
   private boolean m_fieldOriented = true;
   private double speedMult = 1.0;
   
+  private boolean brasOUT = false ;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   private final CommandXboxController m_driverController =
@@ -186,18 +188,21 @@ public class RobotContainer {
 
     //Noms de mécasnismes activés en Majuscule
 
-    JoystickButton Turret = new JoystickButton(m_copilote, 1); // a 
-    JoystickButton Shooter = new JoystickButton(m_copilote, 2); // b
-    JoystickButton Tube = new JoystickButton(m_copilote, 3); // x
-    JoystickButton Intake = new JoystickButton(m_copilote, 4); // y
+    POVButton Turret = new POVButton(m_copilote, 0); // Pov haut
+    JoystickButton Shooter = new JoystickButton(m_copilote, 3); // x
+    JoystickButton Tube = new JoystickButton(m_copilote, 1); // a
+    JoystickButton IntakeIn = new JoystickButton(m_copilote, 5); //bumber gauche
+    JoystickButton IntakeOut = new JoystickButton(m_copilote, 6); // bumber droit
 
-    JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
-    JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
-    POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Droite
-    POVButton GrimpeurUP = new POVButton(m_copilote, 0); // Haut
-    POVButton GrimpeurDOWN = new POVButton(m_copilote, 180); // Bas
-    JoystickButton Brasintakedefault = new JoystickButton(m_copilote, 9);
-    JoystickButton Brasintakedown = new JoystickButton(m_copilote, 10);
+    JoystickButton BrasIntakeOut = new JoystickButton(m_copilote, 4); // y
+    JoystickButton BrasIntakeIn = new JoystickButton(m_copilote, 2); // b
+
+    //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
+    //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
+    //POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Droite
+
+    //JoystickButton Brasintakedefault = new JoystickButton(m_copilote, 9);
+    //JoystickButton Brasintakedown = new JoystickButton(m_copilote, 10);
 
   
 
@@ -209,26 +214,33 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox cont roller's B button is pressed,
     // cancelling on release.<
       m_driverController.back().onTrue(
-    new InstantCommand(() -> drivebase.zeroHeading(), drivebase)
-);
+    new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
    Tube.whileTrue(new TubeCommand(tube, 0.5, 0.55));
-   Intake.whileTrue(new IntakeCommand(intake, -0.3))
-  ;
-
-   ActuatorExtend.whileTrue(new MoveActuatorCommand(actuator, true));  // étendre
-   ActuatorRetract.whileTrue(new MoveActuatorCommand(actuator, false)); // rétracter
-   ActuatorPos50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
-   ActuatorPos50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
+   IntakeIn.whileTrue(new IntakeCommand(intake, -0.3));
+   IntakeOut.whileTrue(new IntakeCommand(intake, 0.55));
    
-   GrimpeurUP.whileTrue(new ClimbingCommand(m_grimpeur, 1)); // monte Grimpeur
-   GrimpeurDOWN.whileTrue(new ClimbingCommand(m_grimpeur, -1)); // descend Grimpeur
 
-   Brasintakedefault.whileTrue(new Brasintakedown(m_Brasintake));
-   Brasintakedown.whileTrue(new Brasintakedefault(m_Brasintake));
+  /* 
+   if (m_copilote.getRawButtonPressed(4)){ // le bouton 4 c'est Y
+    brasOUT = !brasOUT;
+    if (brasOUT) {
+        System.out.println("down");
+        new Brasintakedown(m_Brasintake).schedule();
+    } else {
+        System.out.println("default");
+        new Brasintakedefault(m_Brasintake).schedule();
+    }
+   } **/
+
+    BrasIntakeOut.onTrue(new Brasintakedown(m_Brasintake));
+    BrasIntakeIn.onTrue(new Brasintakedefault(m_Brasintake));
     
+    m_driverController.back().onTrue(
+            new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
+
     m_driverController.start().onTrue( // Démarrer FO (FC)
     Commands.runOnce(() -> {
       m_fieldOriented = !m_fieldOriented;

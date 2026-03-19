@@ -44,6 +44,7 @@ private double setpoint;
  
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("resultBras",(MathUtil.clamp((command + IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed)));
         SmartDashboard.putNumber("Voltage_Intake_motor", m_BrasintakeMotor.getOutputCurrent());
         SmartDashboard.putNumber("setpoint_Intake", setpoint);
         SmartDashboard.putNumber("currentposIntake", getPosition());

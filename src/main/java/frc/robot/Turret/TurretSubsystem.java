@@ -41,7 +41,7 @@ public class TurretSubsystem extends SubsystemBase {
  
   public TurretSubsystem() {
     var config = new SparkMaxConfig();
-    double degPerEncoderRotation = 0.78; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
+    double degPerEncoderRotation = 1.56; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
 
     config.encoder.positionConversionFactor(degPerEncoderRotation);
  

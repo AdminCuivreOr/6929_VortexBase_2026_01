@@ -18,11 +18,11 @@ package frc.robot.Intake;
 
 public final class IntakeConstants {
 
-  public static final int motorID = 14; // id moteur Intake 14
-  public static final double maxSpeed = 0.5;
+  public static final int motorID = 14; // id moteur bras Intake 14
+  public static final double maxSpeed = 1.0; // max bras
  
-  public static final double kp = 0.1;//02
-  public static final double ki = 0.0;//015
+  public static final double kp = 0.07;
+  public static final double ki = 0.0;
   public static final double kd = 0.0;
   public static final double kf = 0.0;
   public static final double tolerance = 1.0;
