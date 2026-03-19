@@ -30,8 +30,8 @@ public class TurretSubsystem extends SubsystemBase {
   // Creates a PIDController with gains kP, kI, and kD
   PIDController pid = new PIDController(TurretConstants.kP, 0,0);
 
-  DigitalInput m_limitSwitchGauche = new DigitalInput(7);
-  DigitalInput m_limitSwitchDroite = new DigitalInput(8);
+  DigitalInput m_limitSwitchGauche = new DigitalInput(0);
+  DigitalInput m_limitSwitchDroite = new DigitalInput(1);
 
 
   // Through-Bore connected to SparkFlex data port (duty-cycle absolute)

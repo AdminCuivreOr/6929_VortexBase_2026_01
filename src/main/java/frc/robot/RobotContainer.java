@@ -218,8 +218,8 @@ public class RobotContainer {
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
-   Tube.whileTrue(new TubeCommand(tube, 0.5, 0.55));
-   IntakeIn.whileTrue(new IntakeCommand(intake, -0.3));
+   Tube.whileTrue(new TubeCommand(tube, 0.5, -0.55));
+   IntakeIn.whileTrue(new IntakeCommand(intake, -0.55));
    IntakeOut.whileTrue(new IntakeCommand(intake, 0.55));
    
 
