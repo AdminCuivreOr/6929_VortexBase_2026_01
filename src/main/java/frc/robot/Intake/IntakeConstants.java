@@ -26,6 +26,11 @@ public final class IntakeConstants {
   public static final double kd = 0.0;
   public static final double kf = 0.0;
   public static final double tolerance = 1.0;
+
+  public static final double kpD = 0.10;
+  public static final double kiD = 0.0;
+  public static final double kdD = 0.0;
+  public static final double kfD = 0.0;
  
   public static final double positionDefaultCount = 0; 
   public static final double Position1Count = -2.9;
