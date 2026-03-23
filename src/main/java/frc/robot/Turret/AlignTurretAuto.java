@@ -8,22 +8,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class AlignTurret extends Command {
+public class AlignTurretAuto extends Command {
 
     private final TurretSubsystem m_turret;
     private final SwerveSubsystem m_swerve;
-    private final Joystick m_joystick;
-    private final int m_povAngle; // angle POV à vérifier (ex : 180 = bas)
 
-    public AlignTurret(TurretSubsystem turret, SwerveSubsystem swerve, Joystick joystick, int povAngle) {
+    public AlignTurretAuto(TurretSubsystem turret, SwerveSubsystem swerve) {
         m_turret = turret;
         m_swerve = swerve;
-        m_joystick = joystick;
-        m_povAngle = povAngle;
 
         addRequirements(turret);
     }
@@ -47,11 +42,10 @@ public class AlignTurret extends Command {
         Translation2d robotToTarget = target.minus(pos.getTranslation());
         Rotation2d angle = robotToTarget.getAngle().minus(pos.getRotation());
 
-        // Condition : POV appuyé sur l’angle choisi
-        if (m_swerve.tagCountLL == 0 || m_joystick.getPOV() == m_povAngle) {
-            m_turret.moveToAngle(0);
+        if (m_swerve.tagCountLL > 0) {
+            m_turret.moveToAngle(-angle.getDegrees());
         } else {
-            m_turret.moveToAngle(angle.getDegrees());
+            m_turret.moveToAngle(0);
         }
 
         SmartDashboard.putNumber("Turret/AngleRAWRobotTarget", angle.getDegrees());

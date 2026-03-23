@@ -78,7 +78,7 @@ import frc.robot.Tube.TubeCommand;
 // Robot - Turret
 import frc.robot.Turret.TurretSubsystem;
 import frc.robot.Turret.AlignTurret;
-
+import frc.robot.Turret.AlignTurretAuto;
 // Robot - Climb
 import frc.robot.Climb.ClimbSubsystem;
 import frc.robot.Climb.ClimbingCommand;
@@ -109,7 +109,7 @@ public class RobotContainer {
 
   //path planner command
  private final Command shooterCommand = new ShooterCommand(m_Shooter, -0.55).withTimeout(5.0);
- private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(5.0);
+ private final Command AlignTurret = new AlignTurretAuto(turret, drivebase).withTimeout(5.0);
  private final Command IntakeCommand = new IntakeCommand(intake, 0.30).withTimeout(5.0);
 
 
@@ -197,6 +197,7 @@ public class RobotContainer {
     JoystickButton BrasIntakeOut = new JoystickButton(m_copilote, 4); // y
     JoystickButton BrasIntakeIn = new JoystickButton(m_copilote, 2); // b
 
+    
     //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
     //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
     //POVButton ActuatorPos50 = new POVButton(m_copilote, 90); // Droite
@@ -216,11 +217,11 @@ public class RobotContainer {
       m_driverController.back().onTrue(
     new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
    
-   Turret.whileTrue(new AlignTurret(turret, drivebase));
-   Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.55) );
+   Turret.whileTrue(new AlignTurret(turret, drivebase, m_copilote, 180));
+   Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.62) );
    Tube.whileTrue(new TubeCommand(tube, 0.5, -0.55));
-   IntakeIn.whileTrue(new IntakeCommand(intake, -0.55));
-   IntakeOut.whileTrue(new IntakeCommand(intake, 0.55));
+   IntakeIn.whileTrue(new IntakeCommand(intake, -0.50));
+   IntakeOut.whileTrue(new IntakeCommand(intake, 0.50));
    
 
   /* 
@@ -252,7 +253,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
       speedMult = 0.5; // Si bumber gauche maintenu : Vitesse lente
     })).onFalse(Commands.runOnce(() -> {
-      speedMult = 1.0; // Si bumber gauche relaché : Vitesse maximale
+      speedMult = 2.0; // Si bumber gauche relaché : Vitesse maximale
     }));
        
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());

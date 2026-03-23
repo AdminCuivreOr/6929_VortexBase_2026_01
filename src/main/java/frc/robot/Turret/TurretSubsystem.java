@@ -30,8 +30,8 @@ public class TurretSubsystem extends SubsystemBase {
   // Creates a PIDController with gains kP, kI, and kD
   PIDController pid = new PIDController(TurretConstants.kP, 0,0);
 
-  DigitalInput m_limitSwitchGauche = new DigitalInput(0);
-  DigitalInput m_limitSwitchDroite = new DigitalInput(1);
+  DigitalInput m_limitSwitchGauche = new DigitalInput(1);
+  DigitalInput m_limitSwitchDroite = new DigitalInput(2);
 
 
   // Through-Bore connected to SparkFlex data port (duty-cycle absolute)
@@ -41,7 +41,7 @@ public class TurretSubsystem extends SubsystemBase {
  
   public TurretSubsystem() {
     var config = new SparkMaxConfig();
-    double degPerEncoderRotation = 1.56; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
+    double degPerEncoderRotation = 16.67; //valeur encodeur 1 tour / 360, prendre la valeur dans le rev hardware client, sinon marche pas
 
     config.encoder.positionConversionFactor(degPerEncoderRotation);
  
@@ -107,7 +107,7 @@ public class TurretSubsystem extends SubsystemBase {
    m_relEncoder.setPosition(TurretConstants.MAX_ANGLE_DEG);
     }
 
-    if (m_limitSwitchGauche.get() == false){ // set l'angle à -90
+    if (m_limitSwitchGauche.get() == true){ // set l'angle à -90
  m_relEncoder.setPosition(TurretConstants.MIN_ANGLE_DEG);
     }
    
