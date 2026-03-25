@@ -16,14 +16,11 @@ public class AlignTurret extends Command {
 
     private final TurretSubsystem m_turret;
     private final SwerveSubsystem m_swerve;
-    private final Joystick m_joystick;
-    private final int m_povAngle; // angle POV à vérifier (ex : 180 = bas)
 
-    public AlignTurret(TurretSubsystem turret, SwerveSubsystem swerve, Joystick joystick, int povAngle) {
+    public AlignTurret(TurretSubsystem turret, SwerveSubsystem swerve) {
         m_turret = turret;
         m_swerve = swerve;
-        m_joystick = joystick;
-        m_povAngle = povAngle;
+       
 
         addRequirements(turret);
     }
@@ -47,8 +44,8 @@ public class AlignTurret extends Command {
         Translation2d robotToTarget = target.minus(pos.getTranslation());
         Rotation2d angle = robotToTarget.getAngle().minus(pos.getRotation());
 
-        // Condition : POV appuyé sur l’angle choisi
-        if (m_swerve.tagCountLL == 0 || m_joystick.getPOV() == m_povAngle) {
+       
+        if (m_swerve.tagCountLL == 0) {
             m_turret.moveToAngle(0);
         } else {
             m_turret.moveToAngle(angle.getDegrees());

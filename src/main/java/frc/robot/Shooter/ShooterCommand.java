@@ -1,22 +1,29 @@
 package frc.robot.Shooter;
-import edu.wpi.first.wpilibj2.command.Command;
 
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShooterCommand extends Command {
 
     private final ShooterSubsystem shooter;
-    private final double speed;
+    private final double rpm;
 
-    public ShooterCommand(ShooterSubsystem shooter, double speed) {
+    public ShooterCommand(ShooterSubsystem shooter, double rpm) {
         this.shooter = shooter;
-        this.speed = speed;
+        this.rpm = rpm;
 
         addRequirements(shooter);
     }
 
     @Override
     public void initialize() {
-        shooter.drive(speed);
+        // On commence à mettre le shooter à la vitesse désirée
+        shooter.setRPM(rpm);
+    }
+
+    @Override
+    public void execute() {
+        // On continue à maintenir la vitesse cible
+        shooter.setRPM(rpm);
     }
 
     @Override

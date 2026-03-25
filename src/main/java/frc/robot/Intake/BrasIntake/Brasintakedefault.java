@@ -9,10 +9,10 @@ public class Brasintakedefault extends Command {
   private final BrasIntakeSubsystem m_Brasintake;
  
   /** Creates a new PositionLiftDefault. */
-  public Brasintakedefault(BrasIntakeSubsystem BrasintakeSubsystem) {
-    m_Brasintake = BrasintakeSubsystem;
+  public Brasintakedefault(BrasIntakeSubsystem BrasintakeDownSubsystem) {
+    m_Brasintake = BrasintakeDownSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(BrasintakeSubsystem);
+    addRequirements(BrasintakeDownSubsystem);
   }
  
  

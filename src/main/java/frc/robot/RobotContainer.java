@@ -61,6 +61,7 @@ import frc.robot.SwerveAndAuto.Autos;
 // Robot - Intake
 import frc.robot.Intake.IntakeSubsystem;
 import frc.robot.Intake.IntakeCommand;
+
 import frc.robot.Intake.BrasIntake.BrasIntakeSubsystem;
 import frc.robot.Intake.BrasIntake.Brasintakedefault;
 import frc.robot.Intake.BrasIntake.Brasintakedown;
@@ -104,13 +105,13 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ClimbSubsystem m_grimpeur = new ClimbSubsystem();
   private final BrasIntakeSubsystem m_Brasintake = new BrasIntakeSubsystem();
-
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
   //path planner command
- private final Command shooterCommand = new ShooterCommand(m_Shooter, -0.55).withTimeout(5.0);
+ private final Command shooterCommand = new ShooterCommand(m_Shooter, 3000).withTimeout(5.0);
  private final Command AlignTurret = new AlignTurretAuto(turret, drivebase).withTimeout(5.0);
  private final Command IntakeCommand = new IntakeCommand(intake, 0.30).withTimeout(5.0);
+ private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
 
 
   // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
@@ -125,13 +126,15 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final Joystick m_copilote = new Joystick(1);
-      
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //NamedCommand for path planner
    NamedCommands.registerCommand("Shooter", shooterCommand);
    NamedCommands.registerCommand("AlignTurret", AlignTurret);
+   NamedCommands.registerCommand("BrasIntakeDown", BrasIntakeDown);
+   NamedCommands.registerCommand("IntakeIn", IntakeCommand);
     // Configure the trigger bindings
     configureBindings();
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
@@ -196,6 +199,7 @@ public class RobotContainer {
 
     JoystickButton BrasIntakeOut = new JoystickButton(m_copilote, 4); // y
     JoystickButton BrasIntakeIn = new JoystickButton(m_copilote, 2); // b
+    POVButton actuator50 = new POVButton(m_copilote, 90);
 
     
     //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
@@ -217,11 +221,15 @@ public class RobotContainer {
       m_driverController.back().onTrue(
     new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
    
-   Turret.whileTrue(new AlignTurret(turret, drivebase, m_copilote, 180));
-   Shooter.whileTrue(new ShooterCommand(m_Shooter, -0.62) );
+   Turret.whileTrue(new AlignTurret(turret, drivebase));
+   Shooter.whileTrue(new ShooterCommand(m_Shooter, -5000));//Shooter active actuator 50 %
+   actuator50.whileTrue(actuator.setPositionPercentCommand(50))
+          .whileFalse(actuator.setPositionPercentCommand(0));// quand relaché 0 % 
+
    Tube.whileTrue(new TubeCommand(tube, 0.5, -0.55));
    IntakeIn.whileTrue(new IntakeCommand(intake, -0.50));
    IntakeOut.whileTrue(new IntakeCommand(intake, 0.50));
+
    
 
   /* 
@@ -251,7 +259,7 @@ public class RobotContainer {
     );
 
     m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
-      speedMult = 0.5; // Si bumber gauche maintenu : Vitesse lente
+      speedMult = 0.2; // Si bumber gauche maintenu : Vitesse lente
     })).onFalse(Commands.runOnce(() -> {
       speedMult = 2.0; // Si bumber gauche relaché : Vitesse maximale
     }));
