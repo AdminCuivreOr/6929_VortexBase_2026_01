@@ -199,7 +199,7 @@ public class RobotContainer {
 
     JoystickButton BrasIntakeOut = new JoystickButton(m_copilote, 4); // y
     JoystickButton BrasIntakeIn = new JoystickButton(m_copilote, 2); // b
-    POVButton actuator50 = new POVButton(m_copilote, 90);
+    POVButton Actuator50 = new POVButton(m_copilote, 90); // droite?
 
     
     //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
@@ -223,8 +223,8 @@ public class RobotContainer {
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, -5000));//Shooter active actuator 50 %
-   actuator50.whileTrue(actuator.setPositionPercentCommand(50))
-          .whileFalse(actuator.setPositionPercentCommand(0));// quand relaché 0 % 
+   Actuator50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
+   Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
 
    Tube.whileTrue(new TubeCommand(tube, 0.5, -0.55));
    IntakeIn.whileTrue(new IntakeCommand(intake, -0.50));
