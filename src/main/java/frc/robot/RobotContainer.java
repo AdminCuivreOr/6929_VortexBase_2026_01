@@ -43,6 +43,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import static edu.wpi.first.units.Units.RPM;
+
 // Java
 import java.io.File;
 
@@ -108,7 +110,7 @@ public class RobotContainer {
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
   //path planner command
- private final Command shooterCommand = new ShooterCommand(m_Shooter, 3000).withTimeout(5.0);
+ private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
  private final Command AlignTurret = new AlignTurretAuto(turret, drivebase).withTimeout(5.0);
  private final Command IntakeCommand = new IntakeCommand(intake, 0.30).withTimeout(5.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
@@ -119,7 +121,8 @@ public class RobotContainer {
 
   private boolean m_fieldOriented = true;
   private double speedMult = 1.0;
-  
+  private double CurrentRPM = -4000.0;
+
   private boolean brasOUT = false ;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -200,7 +203,8 @@ public class RobotContainer {
     JoystickButton BrasIntakeOut = new JoystickButton(m_copilote, 4); // y
     JoystickButton BrasIntakeIn = new JoystickButton(m_copilote, 2); // b
     POVButton Actuator50 = new POVButton(m_copilote, 90); // droite?
-
+    JoystickButton RPMplus = new JoystickButton(m_copilote, 9); //bouton temporaire
+    JoystickButton RPMmoins = new JoystickButton(m_copilote, 10);
     
     //JoystickButton ActuatorExtend = new JoystickButton(m_copilote, 5); // bumber gauche
     //JoystickButton ActuatorRetract = new JoystickButton(m_copilote, 6); // bumber droit
@@ -222,16 +226,26 @@ public class RobotContainer {
     new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
    
    Turret.whileTrue(new AlignTurret(turret, drivebase));
-   Shooter.whileTrue(new ShooterCommand(m_Shooter, -5000));//Shooter active actuator 50 %
+   Shooter.whileTrue(new ShooterCommand(m_Shooter, drivebase));//Shooter active actuator 50 %
    Actuator50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
    Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
 
-   Tube.whileTrue(new TubeCommand(tube, 0.5, -0.55));
-   IntakeIn.whileTrue(new IntakeCommand(intake, -0.50));
-   IntakeOut.whileTrue(new IntakeCommand(intake, 0.50));
+   Tube.whileTrue(new TubeCommand(tube, 0.75, -0.75));
+   IntakeIn.whileTrue(new IntakeCommand(intake, -0.75));
+   IntakeOut.whileTrue(new IntakeCommand(intake, 0.75));
 
-   
+   //temporaire :
 
+   RPMmoins.onTrue(Commands.runOnce(()-> {
+    CurrentRPM = CurrentRPM + 100;
+    SmartDashboard.putNumber("VariableRPMShooter", CurrentRPM);
+   }));
+
+   RPMplus.onTrue(Commands.runOnce(() -> {
+    CurrentRPM = CurrentRPM - 100;
+    SmartDashboard.putNumber("VariableRPMShooter", CurrentRPM);
+   }));
+    //o
   /* 
    if (m_copilote.getRawButtonPressed(4)){ // le bouton 4 c'est Y
     brasOUT = !brasOUT;
