@@ -223,4 +223,8 @@ swerveDrive.addVisionMeasurement(
         }
     }
 
+    public int getTagCount() {
+       return tagCountLL;
+    }
+
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 // WPILib - Core
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -149,7 +150,13 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     //Put the autoChooser on the SmartDashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
-  }
+
+     new RunCommand(() -> {
+        double value = (drivebase.getTagCount() > 0) ? 0.25 : 0.0;
+        m_driverController.setRumble(GenericHID.RumbleType.kBothRumble, value);
+    }).ignoringDisable(true).schedule();
+}
+  
 
    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                 () -> m_driverController.getLeftY() * -1 * speedMult, 
@@ -272,6 +279,9 @@ public class RobotContainer {
     })
     );
 
+   
+
+
     m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
       speedMult = 0.2; // Si bumber gauche maintenu : Vitesse lente
     })).onFalse(Commands.runOnce(() -> {
@@ -280,7 +290,7 @@ public class RobotContainer {
        
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
-
+ 
 
   /**
    * Get the path follower with events.
