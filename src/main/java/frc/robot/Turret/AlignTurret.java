@@ -1,5 +1,6 @@
 package frc.robot.Turret;
 
+import frc.robot.LimelightHelpers;
 import frc.robot.SwerveAndAuto.SwerveSubsystem;
 
 import java.util.Optional;
@@ -28,7 +29,9 @@ public class AlignTurret extends Command {
     @Override
     public void execute() {
         var pos = m_swerve.getPose();
-        Translation2d target;
+    
+
+        Translation2d target = new Translation2d(0,0);
 
         Optional<Alliance> ally = DriverStation.getAlliance();
         if (ally.isPresent()) {
@@ -37,21 +40,27 @@ public class AlignTurret extends Command {
             } else {
                 target = new Translation2d(4.63, 4.035);
             }
-        } else {
-            target = new Translation2d(0, 0);
         }
+        else {
+            System.out.println("aucune couleur d'alliance");
+        }
+        
 
-        Translation2d robotToTarget = target.minus(pos.getTranslation());
-        Rotation2d angle = robotToTarget.getAngle().minus(pos.getRotation());
+Translation2d robotToTarget = target.minus(pos.getTranslation());
+Rotation2d desiredAngle = robotToTarget.getAngle();
+ 
+Rotation2d turretAngle = desiredAngle.minus(pos.getRotation());
+ 
+var ll = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
        
-        if (m_swerve.tagCountLL == 0) {
-            m_turret.moveToAngle(0);
+        if (m_swerve.tagCountLL > 0) {
+            m_turret.moveToAngle(turretAngle.getDegrees());
         } else {
-            m_turret.moveToAngle(angle.getDegrees());
+            m_turret.moveToAngle(0);
         }
 
-        SmartDashboard.putNumber("Turret/AngleRAWRobotTarget", angle.getDegrees());
+        SmartDashboard.putNumber("Turret/AngleRAWRobotTarget", turretAngle.getDegrees());
     }
 
     @Override

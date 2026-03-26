@@ -64,8 +64,22 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.setHeadingCorrection(false);
   }
  
-  @Override
-  public void periodic() {
+@Override
+public void periodic() {
+ 
+    // 1. Toujours update odometry
+    swerveDrive.updateOdometry();
+ 
+    // 2. Vision seulement en TELEOP
+    if (!DriverStation.isAutonomous()) {
+        addLimelightVisionMeasurementMegaTag1();
+    }
+    
+      // 3. Debug
+    SmartDashboard.putNumber("NavX-Yaw", m_gyro.getYaw());
+    SmartDashboard.putNumber("SwerveX", swerveDrive.getPose().getX());
+    SmartDashboard.putNumber("SwerveY", swerveDrive.getPose().getY());
+    SmartDashboard.putNumber("SwerveYAW", swerveDrive.getPose().getRotation().getDegrees());
 
     LimelightHelpers.PoseEstimate mt1 =
         LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME);
@@ -85,19 +99,6 @@ swerveDrive.addVisionMeasurement(
       SmartDashboard.putNumber("SwerveY", swerveDrive.getPose().getY());
       SmartDashboard.putNumber("SwerveYAW", swerveDrive.getPose().getRotation().getDegrees());
 
-
-
-
- 
-    // 1) Update YAGSL odometry every loop (this is important)
-    // YAGSL docs / javadocs: updateOdometry should be run every loop. :contentReference[oaicite:4]{index=4}
-    swerveDrive.updateOdometry();
- 
-    // 2) Publish gyro info (your original)
-    SmartDashboard.putNumber("NavX-Yaw", m_gyro.getYaw());
- 
-    // 3) Add Limelight Robot Localization as vision corrections (MegaTag1 style)
-    addLimelightVisionMeasurementMegaTag1();
 
 
   }
