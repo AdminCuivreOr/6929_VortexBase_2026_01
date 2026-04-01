@@ -1,0 +1,102 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.07,
+        "y": 0.66
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.676332781456954,
+        "y": 0.6155711920529803
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.258998344370861,
+        "y": 0.884188741721855
+      },
+      "prevControl": {
+        "x": 5.271647350993376,
+        "y": 0.6582615894039726
+      },
+      "nextControl": {
+        "x": 7.3919697243526,
+        "y": 1.1434369718384105
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.754544701986754,
+        "y": 2.140157284768212
+      },
+      "prevControl": {
+        "x": 7.173749999999999,
+        "y": 1.239925496688743
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "hahaha"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7040572792362594,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.720763723150358,
+      "rotationDegrees": 56.52291525942721
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Bras down",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "BrasIntakeDown"
+        }
+      }
+    },
+    {
+      "name": "Intake in",
+      "waypointRelativePos": 1.15,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeIn"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 58.828650972280144
+  },
+  "reversed": false,
+  "folder": "Bleu path droite",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -0.10972586076817674
+  },
+  "useDefaultConstraints": true
+}

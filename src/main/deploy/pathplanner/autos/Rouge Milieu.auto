@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bleu D2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Bleu D3 retour"
+            "pathName": "Bleu Milieu"
           }
         }
       ]
     }
   },
   "resetOdom": false,
-  "folder": "Bleu Auto",
+  "folder": "Rouge Auto",
   "choreoAuto": false
 }

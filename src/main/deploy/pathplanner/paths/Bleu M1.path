@@ -1,0 +1,121 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5467141162514837,
+        "y": 4.051138790035587
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8484983032666893,
+        "y": 4.771596775230824
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.7284104389086603,
+        "y": 5.98779359430605
+      },
+      "prevControl": {
+        "x": 1.9780187064962995,
+        "y": 5.973803856928333
+      },
+      "nextControl": {
+        "x": 0.8295818818634808,
+        "y": 6.03817003248328
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.4588256227758012,
+        "y": 5.98779359430605
+      },
+      "prevControl": {
+        "x": 1.3974395821397683,
+        "y": 5.978073993531838
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "drop",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Bras down"
+        }
+      }
+    },
+    {
+      "name": "IntakeIn",
+      "waypointRelativePos": 0.6967032967032827,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "AlignTurret",
+      "waypointRelativePos": 0.7060458651841341,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AlignTurret"
+        }
+      }
+    },
+    {
+      "name": "Shooter",
+      "waypointRelativePos": 1.39560439560439,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooter"
+        }
+      }
+    },
+    {
+      "name": "Tube",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Tube"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Bleu path milieu",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

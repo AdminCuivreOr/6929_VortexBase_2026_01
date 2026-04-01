@@ -74,8 +74,8 @@ public class TurretSubsystem extends SubsystemBase {
         TurretConstants.MAX_ANGLE_DEG
     );
  
-    double output = pid.calculate(m_relEncoder.getPosition(), targetDeg);
     double position = getAngle();
+    double output = pid.calculate(position, targetDeg);
     double erreur = targetDeg - position;
 
     if (erreur > TurretConstants.ANGLE_TOLERANCE_DEG) {

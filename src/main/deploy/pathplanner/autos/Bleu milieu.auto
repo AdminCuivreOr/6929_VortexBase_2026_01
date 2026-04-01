@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bleu D2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Bleu D3 retour"
+            "pathName": "Bleu M1"
           }
         }
       ]

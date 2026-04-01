@@ -63,7 +63,7 @@ public class ShooterCommand extends Command {
 
     private double getRPMFromDistance(double distance) {
         // formule quadratique
-        return -18.129 * distance * distance + 536.45 * distance + 1926.3;
+        return (-18.129 * distance * distance + 536.45 * distance + 1926.3)*1.00;
     }
 
     @Override

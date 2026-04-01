@@ -73,6 +73,8 @@ public void periodic() {
     // 2. Vision seulement en TELEOP
     if (!DriverStation.isAutonomous()) {
         addLimelightVisionMeasurementMegaTag1();
+
+        
     }
     
       // 3. Debug
@@ -83,12 +85,8 @@ public void periodic() {
 
     LimelightHelpers.PoseEstimate mt1 =
         LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME);
-swerveDrive.addVisionMeasurement(
-          mt1.pose,
-          mt1.timestampSeconds,
-          VecBuilder.fill(.5, .5, 9999999)
-      );
-      tagCountLL = mt1.tagCount;
+
+            tagCountLL = mt1.tagCount;
 
       SmartDashboard.putNumber("LL tagCount", mt1.tagCount);
       SmartDashboard.putNumber("LL X", mt1.pose.getX());
@@ -104,45 +102,47 @@ swerveDrive.addVisionMeasurement(
   }
  
   private void addLimelightVisionMeasurementMegaTag1() {
-    boolean doRejectUpdate = false;
+ 
+    if (DriverStation.isAutonomous()) return;
  
     LimelightHelpers.PoseEstimate mt1 =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME); // 2024+ use wpiblue :contentReference[oaicite:5]{index=5}
+
+        LimelightHelpers.getBotPoseEstimate_wpiBlue(LIMELIGHT_NAME);
  
-    // Basic rejection logic (from Limelight doc example)
-    if (mt1.tagCount == 0) {
-      doRejectUpdate = true;
-    }
+    // 🚨 REJET SI PAS DE TAG
+
+    if (mt1.tagCount == 0) return;
+ 
+    // 🚨 REJET SI POSE = 0,0 (TRÈS IMPORTANT)
+
+    if (mt1.pose.getX() == 0 && mt1.pose.getY() == 0) return;
+ 
+    boolean doRejectUpdate = false;
  
     if (mt1.tagCount == 1 && mt1.rawFiducials != null && mt1.rawFiducials.length == 1) {
-      if (mt1.rawFiducials[0].ambiguity > 0.7) {
-        doRejectUpdate = true;
-      }
-      if (mt1.rawFiducials[0].distToCamera > 3.0) { // meters
-        doRejectUpdate = true;
-      }
+
+        if (mt1.rawFiducials[0].ambiguity > 0.7) doRejectUpdate = true;
+
+        if (mt1.rawFiducials[0].distToCamera > 3.0) doRejectUpdate = true;
+
     }
  
     if (!doRejectUpdate) {
-      // Same intent as your line:
-      // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
-      // In YAGSL, you can pass std devs directly into addVisionMeasurement overload. :contentReference[oaicite:6]{index=6}
-      swerveDrive.addVisionMeasurement(
-          mt1.pose,
-          mt1.timestampSeconds,
-          VecBuilder.fill(.5, .5, 9999999)
-      );
- 
-      SmartDashboard.putNumber("LL tagCount", mt1.tagCount);
-      SmartDashboard.putNumber("LL X", mt1.pose.getX());
-      SmartDashboard.putNumber("LL Y", mt1.pose.getY());
-      SmartDashboard.putNumber("LL Yaw(deg)", mt1.pose.getRotation().getDegrees());
 
-      SmartDashboard.putNumber("SwerveX", swerveDrive.getPose().getX());
-      SmartDashboard.putNumber("SwerveY", swerveDrive.getPose().getY());
-      SmartDashboard.putNumber("SwerveYAW", swerveDrive.getPose().getRotation().getDegrees());
+        swerveDrive.addVisionMeasurement(
+
+            mt1.pose,
+
+            mt1.timestampSeconds,
+
+            VecBuilder.fill(.5, .5, 9999999)
+
+        );
+
     }
-  }
+
+}
+ 
  
   // --- Your existing drive wrappers ---
   public void driveFieldOriented(ChassisSpeeds velocity) {
@@ -205,8 +205,10 @@ swerveDrive.addVisionMeasurement(
                     },
 
                     new PPHolonomicDriveController(
-                            new PIDConstants(1.0, 0.0, 0.0),
-                            new PIDConstants(1.0, 0.0, 0.0)
+                            new PIDConstants(1.0, 0.0, 0.0), // X et Y : trop vite le robot fait du balayage 
+                            new PIDConstants(0.4, 0.0, 0.0) // Rotation : pas assez on dirait que l'autonome est saoul. 
+                            //J'essairais 0,3 mais je vais dire 0,4 car Augustin fait toujours différent (C'est pas vrai, -Augustin)
+                            
                     ),
 
                     config,

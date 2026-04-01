@@ -110,11 +110,12 @@ public class RobotContainer {
   private final BrasIntakeSubsystem m_Brasintake = new BrasIntakeSubsystem();
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
-  //path planner command
+  //path planner command en majuscule 💀🥀😔⚰️⚰️🍂‼️
  private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
  private final Command AlignTurret = new AlignTurretAuto(turret, drivebase).withTimeout(5.0);
- private final Command IntakeCommand = new IntakeCommand(intake, 0.30).withTimeout(5.0);
+ private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(5.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
+ private final Command TubeCommand = new TubeCommand(tube, 0.75, -0.75).withTimeout(5.0);
 
 
   // Establish a Sendable Chooser that will be able to be sent to the SmartDashboard, allowing selection of desired auto
@@ -139,6 +140,7 @@ public class RobotContainer {
    NamedCommands.registerCommand("AlignTurret", AlignTurret);
    NamedCommands.registerCommand("BrasIntakeDown", BrasIntakeDown);
    NamedCommands.registerCommand("IntakeIn", IntakeCommand);
+   NamedCommands.registerCommand("Tube", TubeCommand);
     // Configure the trigger bindings
     configureBindings();
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
@@ -151,8 +153,8 @@ public class RobotContainer {
     //Put the autoChooser on the SmartDashboard
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-     new RunCommand(() -> {
-        double value = (drivebase.getTagCount() > 0) ? 0.25 : 0.0;
+     new RunCommand(() -> {                         
+        double value = (drivebase.getTagCount() > 0) ? 0.0 : 0.0; // rumble si oui : si non 
         m_driverController.setRumble(GenericHID.RumbleType.kBothRumble, value);
     }).ignoringDisable(true).schedule();
 }

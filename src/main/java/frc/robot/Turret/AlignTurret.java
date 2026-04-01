@@ -54,13 +54,13 @@ Rotation2d turretAngle = desiredAngle.minus(pos.getRotation());
 var ll = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
        
-        if (m_swerve.tagCountLL > 0) {
+        if (ll.tagCount > 0) {
             m_turret.moveToAngle(turretAngle.getDegrees());
         } else {
             m_turret.moveToAngle(0);
         }
 
-        SmartDashboard.putNumber("Turret/AngleRAWRobotTarget", turretAngle.getDegrees());
+        SmartDashboard.putNumber("Turret/Error", turretAngle.getDegrees());
     }
 
     @Override
