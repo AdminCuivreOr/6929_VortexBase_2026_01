@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.434884105960265,
-        "y": 0.6446109271523186
+        "x": 3.5510430463576164,
+        "y": 3.9188410596026486
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.434884105960265,
-        "y": 0.6446109271523186
+        "x": 2.2006953642384106,
+        "y": 3.882541390728476
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.8161423841059605,
-        "y": 0.6446109271523186
+        "x": 1.714279801324503,
+        "y": 3.802682119205298
       },
       "prevControl": {
-        "x": 4.8161423841059605,
-        "y": 0.6446109271523186
+        "x": 3.6599420529801323,
+        "y": 3.933360927152318
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,52 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "drop",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "BrasIntakeDown"
+        }
+      }
+    },
+    {
+      "name": "AlignTurret",
+      "waypointRelativePos": 0.4391938846421166,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AlignTurret"
+        }
+      }
+    },
+    {
+      "name": "Shooter",
+      "waypointRelativePos": 0.5211952744961778,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shooter"
+        }
+      }
+    },
+    {
+      "name": "Tube",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Tube"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
@@ -42,13 +87,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Bleu path droite",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 178.86557836902307
   },
   "useDefaultConstraints": true
 }

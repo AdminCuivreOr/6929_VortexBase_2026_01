@@ -59,11 +59,14 @@ public class ShooterCommand extends Command {
         // appliquer au shooter
         shooter.setRPM(rpm);
         SmartDashboard.putNumber("ShooterRPM", rpm);
+        
     }
 
     private double getRPMFromDistance(double distance) {
         // formule quadratique
+        SmartDashboard.putNumber("resultatshoot", (-18.129 * distance * distance + 536.45 * distance + 1926.3)*1.00);
         return (-18.129 * distance * distance + 536.45 * distance + 1926.3)*1.00;
+        
     }
 
     @Override

@@ -55,7 +55,7 @@
       "command": {
         "type": "named",
         "data": {
-          "name": "Bras down"
+          "name": "BrasIntakeDown"
         }
       }
     },

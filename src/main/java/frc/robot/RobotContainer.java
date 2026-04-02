@@ -112,7 +112,7 @@ public class RobotContainer {
 
   //path planner command en majuscule 💀🥀😔⚰️⚰️🍂‼️
  private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
- private final Command AlignTurret = new AlignTurretAuto(turret, drivebase).withTimeout(5.0);
+ private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(5.0);
  private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(5.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
  private final Command TubeCommand = new TubeCommand(tube, 0.75, -0.75).withTimeout(5.0);
@@ -154,7 +154,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
      new RunCommand(() -> {                         
-        double value = (drivebase.getTagCount() > 0) ? 0.0 : 0.0; // rumble si oui : si non 
+        double value = (drivebase.getTagCount() > 0) ? 0.2 : 0.0; // rumble si oui : si non 
         m_driverController.setRumble(GenericHID.RumbleType.kBothRumble, value);
     }).ignoringDisable(true).schedule();
 }
