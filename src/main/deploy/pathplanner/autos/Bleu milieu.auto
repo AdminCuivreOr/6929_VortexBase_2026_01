@@ -5,9 +5,46 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "BrasIntakeDown"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Bleu M1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignTurret"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Tube"
+                }
+              }
+            ]
           }
         }
       ]

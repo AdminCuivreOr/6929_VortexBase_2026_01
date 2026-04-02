@@ -32,11 +32,11 @@
     },
     {
       "anchor": {
-        "x": 0.4588256227758012,
+        "x": 0.9645077105575333,
         "y": 5.98779359430605
       },
       "prevControl": {
-        "x": 1.3974395821397683,
+        "x": 1.9031216699215003,
         "y": 5.978073993531838
       },
       "nextControl": null,
@@ -49,58 +49,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "drop",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "BrasIntakeDown"
-        }
-      }
-    },
-    {
       "name": "IntakeIn",
-      "waypointRelativePos": 0.6967032967032827,
+      "waypointRelativePos": 0.22197802197802102,
       "endWaypointRelativePos": null,
       "command": null
-    },
-    {
-      "name": "AlignTurret",
-      "waypointRelativePos": 0.7060458651841341,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "AlignTurret"
-        }
-      }
-    },
-    {
-      "name": "Shooter",
-      "waypointRelativePos": 1.39560439560439,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shooter"
-        }
-      }
-    },
-    {
-      "name": "Tube",
-      "waypointRelativePos": 2.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Tube"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -109,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Bleu path milieu",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
