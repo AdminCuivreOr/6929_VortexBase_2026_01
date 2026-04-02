@@ -205,8 +205,8 @@ public void periodic() {
                     },
 
                     new PPHolonomicDriveController(
-                            new PIDConstants(1.0, 0.0, 0.0), // X et Y : trop vite le robot fait du balayage 
-                            new PIDConstants(0.5, 0.0, 0.0) // Rotation : pas assez on dirait que l'autonome est saoul. 
+                            new PIDConstants(0.3, 0.0, 0.0), // X et Y : trop vite le robot fait du balayage 
+                            new PIDConstants(0.6, 0.0, 0.0) // Rotation : pas assez on dirait que l'autonome est saoul. 
                             //J'essairais 0,3 mais je vais dire 0,4 car Augustin fait toujours différent (C'est pas vrai, -Augustin)
                             
                     ),

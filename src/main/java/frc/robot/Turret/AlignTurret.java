@@ -57,7 +57,7 @@ var ll = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
         if (ll.tagCount > 0) {
             m_turret.moveToAngle(turretAngle.getDegrees());
         } else {
-            m_turret.moveToAngle(0);
+             m_turret.moveToAngle(turretAngle.getDegrees());
         }
 
         SmartDashboard.putNumber("Turret/Error", turretAngle.getDegrees());

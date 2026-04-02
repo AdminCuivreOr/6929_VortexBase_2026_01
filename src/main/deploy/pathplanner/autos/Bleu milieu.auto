@@ -25,13 +25,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooter"
+            "name": "Shooter3"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeIn"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -50,7 +56,7 @@
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Bleu Auto",
   "choreoAuto": false
 }

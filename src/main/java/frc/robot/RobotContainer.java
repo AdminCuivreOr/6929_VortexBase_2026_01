@@ -111,9 +111,10 @@ public class RobotContainer {
   private final ActuatorSubsystem actuator = new ActuatorSubsystem();
 
   //path planner command en majuscule 💀🥀😔⚰️⚰️🍂‼️
+ private final Command shooterCommand3 = new ShooterCommand(m_Shooter, drivebase).withTimeout(3.0);
  private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
- private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(5.0);
- private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(5.0);
+ private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(2.0);
+ private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(10.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
  private final Command TubeCommand = new TubeCommand(tube, 0.75, -0.75).withTimeout(5.0);
 
@@ -137,6 +138,7 @@ public class RobotContainer {
   public RobotContainer() {
     //NamedCommand for path planner
    NamedCommands.registerCommand("Shooter", shooterCommand);
+   NamedCommands.registerCommand("Shooter3", shooterCommand3);
    NamedCommands.registerCommand("AlignTurret", AlignTurret);
    NamedCommands.registerCommand("BrasIntakeDown", BrasIntakeDown);
    NamedCommands.registerCommand("IntakeIn", IntakeCommand);
