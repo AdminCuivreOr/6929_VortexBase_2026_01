@@ -5,11 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -18,8 +26,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  NetworkTableEntry cameraSelection;
+   UsbCamera camera1;
+   //UsbCamera camera2;
+   VideoSink server;
 
   private final RobotContainer m_robotContainer;
+
+   
+
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -29,6 +45,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+     if (!RobotBase.isSimulation()) {
+        camera1 = CameraServer.startAutomaticCapture(0);
+        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+        server = CameraServer.getServer();
+        camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        camera1.setBrightness(50);
+        camera1.setFPS(15);
+        camera1.setResolution(160, 120);
+    }
   }
 
   /**

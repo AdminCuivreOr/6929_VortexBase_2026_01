@@ -72,6 +72,7 @@ import frc.robot.Intake.BrasIntake.Brasintakedown;
 // Robot - Shooter
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.ShooterCommand;
+import frc.robot.Shooter.ShooterCommandConstant;
 import frc.robot.Shooter.Actuator.ActuatorSubsystem;
 import frc.robot.Shooter.Actuator.MoveActuatorCommand;
 
@@ -114,7 +115,7 @@ public class RobotContainer {
  private final Command shooterCommand3 = new ShooterCommand(m_Shooter, drivebase).withTimeout(3.0);
  private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
  private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(2.0);
- private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(10.0);
+ private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(20.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
  private final Command TubeCommand = new TubeCommand(tube, 0.75, -0.75).withTimeout(5.0);
 
@@ -207,6 +208,7 @@ public class RobotContainer {
 
     POVButton Turret = new POVButton(m_copilote, 0); // Pov haut
     JoystickButton Shooter = new JoystickButton(m_copilote, 3); // x
+    POVButton ShooterConstant = new POVButton(m_copilote, 180);
     JoystickButton Tube = new JoystickButton(m_copilote, 1); // a
     JoystickButton IntakeIn = new JoystickButton(m_copilote, 5); //bumber gauche
     JoystickButton IntakeOut = new JoystickButton(m_copilote, 6); // bumber droit
@@ -242,8 +244,11 @@ public class RobotContainer {
    Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
 
    Tube.whileTrue(new TubeCommand(tube, 0.75, -0.75));
+   Tube.whileTrue(new IntakeCommand(intake, -0.75));
    IntakeIn.whileTrue(new IntakeCommand(intake, -0.75));
    IntakeOut.whileTrue(new IntakeCommand(intake, 0.75));
+
+   ShooterConstant.whileTrue(new ShooterCommandConstant(m_Shooter));
 
    //temporaire :
 

@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         System.out.println(m_relEncoder.getVelocity());
-        
+        double Rpmveut = m_relEncoder.getVelocity();
     }
 
    public void setRPM(double rpm) {

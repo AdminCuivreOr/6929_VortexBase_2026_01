@@ -103,12 +103,12 @@ public class TurretSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
       SmartDashboard.putNumber("Turret/AngleDeg", m_relEncoder.getPosition());
-     if (m_limitSwitchDroite.get() == true){ // set l'angle à 90
-   m_relEncoder.setPosition(TurretConstants.MAX_ANGLE_DEG);
+     if (m_limitSwitchDroite.get() == true){ //max tourelle
+   m_relEncoder.setPosition(96);
     }
 
-    if (m_limitSwitchGauche.get() == true){ // set l'angle à -90
- m_relEncoder.setPosition(TurretConstants.MIN_ANGLE_DEG);
+    if (m_limitSwitchGauche.get() == true){ // min
+ m_relEncoder.setPosition(-65);
     }
    
     
