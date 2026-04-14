@@ -5,15 +5,58 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "BrasIntakeDown"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Bleu Milieu"
+            "pathName": "Rouge Milieu"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlignTurret"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeIn"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Tube"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Rouge Auto",
   "choreoAuto": false
 }

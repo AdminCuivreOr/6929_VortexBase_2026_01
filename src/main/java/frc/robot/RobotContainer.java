@@ -243,7 +243,7 @@ public class RobotContainer {
    Actuator50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
    Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
 
-   Tube.whileTrue(new TubeCommand(tube, 0.75, -0.75));
+   Tube.whileTrue(new TubeCommand(tube, 0.90, -0.90));
    Tube.whileTrue(new IntakeCommand(intake, -0.75));
    IntakeIn.whileTrue(new IntakeCommand(intake, -0.75));
    IntakeOut.whileTrue(new IntakeCommand(intake, 0.75));

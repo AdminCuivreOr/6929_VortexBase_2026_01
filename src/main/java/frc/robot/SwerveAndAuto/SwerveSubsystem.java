@@ -179,6 +179,33 @@ public void periodic() {
     SmartDashboard.putNumber("NavX-Yaw", 0);
   }
 
+  public void resetPose(Pose2d pose) {
+
+    // On garde le vrai heading du robot
+
+    Rotation2d currentRotation = m_gyro.getRotation2d();
+
+    // On remplace seulement X et Y
+
+    Pose2d correctedPose = new Pose2d(
+
+        pose.getX(),
+
+        pose.getY(),
+
+        currentRotation
+
+    );
+
+    // Reset odometry avec heading conservé
+
+    swerveDrive.resetOdometry(correctedPose);
+
+}
+ 
+
+  
+
     // ---------------- PATHPLANNER ----------------
 
     public void setupPathPlanner() {
@@ -189,7 +216,7 @@ public void periodic() {
 
             AutoBuilder.configure(
                     swerveDrive::getPose,
-                    swerveDrive::resetOdometry,
+                    this::resetPose,
                     swerveDrive::getRobotVelocity,
 
                     (speedsRobotRelative, moduleFeedForwards) -> {

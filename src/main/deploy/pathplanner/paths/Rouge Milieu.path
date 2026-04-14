@@ -49,57 +49,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "drop",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Bras down"
-        }
-      }
-    },
-    {
-      "name": "AlignTurret",
-      "waypointRelativePos": 1.2091730368311375,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "AlignTurret"
-        }
-      }
-    },
-    {
       "name": "Intake in",
       "waypointRelativePos": 1.2369701181376003,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Intake in"
-        }
-      }
-    },
-    {
-      "name": "Shooter",
-      "waypointRelativePos": 1.4510076441973705,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shooter"
-        }
-      }
-    },
-    {
-      "name": "Tube",
-      "waypointRelativePos": 2.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Tube"
+          "name": "IntakeIn"
         }
       }
     }
@@ -114,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "rouge path milieu",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
