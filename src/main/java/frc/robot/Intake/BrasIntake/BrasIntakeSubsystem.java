@@ -1,7 +1,11 @@
 package frc.robot.Intake.BrasIntake;
  
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,11 +17,26 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Intake.IntakeConstants;
  
 public class BrasIntakeSubsystem extends SubsystemBase {
+
+      private static double kS = 1.1;
+    private static double kG = 1.2;
+     private static double kV = 1.3;
+
     private final SparkMax m_BrasintakeMotor = new SparkMax(IntakeConstants.motorID, MotorType.kBrushless);
     private final RelativeEncoder m_BrasintakeEncoder = m_BrasintakeMotor.getEncoder();
-    private final PIDController m_BrasintakePID = new PIDController(IntakeConstants.kp, IntakeConstants.ki, IntakeConstants.kd);
+
+    private final TrapezoidProfile.Constraints m_constraints =
+      new TrapezoidProfile.Constraints(1.75, 0.75);
+
+    private final ProfiledPIDController m_BrasintakePID = new ProfiledPIDController
+        (IntakeConstants.kp, IntakeConstants.ki, IntakeConstants.kd, m_constraints, IntakeConstants.kDt);
+
     
-private double setpoint;
+    private final ElevatorFeedforward m_feedforward = new ElevatorFeedforward(kS, kG, kV);
+
+  // private final ProfiledPIDController m_BrasintakePID = new ProfiledPIDController(0.07, IntakeConstants.ki, IntakeConstants.kd, new Constraints(0.5, 0.5));
+    
+    private double setpoint;
     private double command;
  
     public BrasIntakeSubsystem() {
@@ -36,10 +55,11 @@ private double setpoint;
  
     public void setPositionTarget(double sp){
         setpoint = sp;
+        m_BrasintakePID.setGoal(sp);
     }
  
     public boolean atSetpoint(){
-        return m_BrasintakePID.atSetpoint();
+        return m_BrasintakePID.atGoal();
     }
  
     @Override
@@ -52,11 +72,11 @@ private double setpoint;
         SmartDashboard.putNumber("Intake_speed", MathUtil.clamp((command + IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
         SmartDashboard.putNumber("ALternate_Intakespeed", MathUtil.clamp((IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
         SmartDashboard.putNumber("intake Position (Rotations)", getPosition());
+
         if(RobotState.isEnabled()){
-            command = m_BrasintakePID.calculate(m_BrasintakeEncoder.getPosition(), setpoint);
-        
-           
-                    m_BrasintakeMotor.set(MathUtil.clamp((command + IntakeConstants.kf), -IntakeConstants.maxSpeed, IntakeConstants.maxSpeed));
+              m_BrasintakeMotor.setVoltage(
+              m_BrasintakePID.calculate(m_BrasintakeEncoder.getPosition())
+               + m_feedforward.calculate(m_BrasintakePID.getSetpoint().velocity));
                 
             }
         }
