@@ -114,7 +114,7 @@ public class RobotContainer {
   //path planner command en majuscule 💀🥀😔⚰️⚰️🍂‼️
  private final Command shooterCommand3 = new ShooterCommand(m_Shooter, drivebase).withTimeout(3.0);
  private final Command shooterCommand = new ShooterCommand(m_Shooter, drivebase).withTimeout(5.0);
- private final Command AlignTurret = new AlignTurret(turret, drivebase).withTimeout(2.0);
+ private final Command AlignTurret = new AlignTurret(turret).withTimeout(2.0);
  private final Command IntakeCommand = new IntakeCommand(intake, -0.75).withTimeout(20.0);
  private final Command BrasIntakeDown = new Brasintakedown(m_Brasintake);
  private final Command TubeCommand = new TubeCommand(tube, 0.75, -0.75).withTimeout(5.0);
@@ -207,8 +207,8 @@ public class RobotContainer {
     //Noms de mécasnismes activés en Majuscule
 
     POVButton Turret = new POVButton(m_copilote, 0); // Pov haut
-    JoystickButton Shooter = new JoystickButton(m_copilote, 3); // x
-    POVButton ShooterConstant = new POVButton(m_copilote, 180);
+    JoystickButton ShooterConstant = new JoystickButton(m_copilote, 3); // x
+    //POVButton ShooterConstant = new POVButton(m_copilote, 180);
     JoystickButton Tube = new JoystickButton(m_copilote, 1); // a
     JoystickButton IntakeIn = new JoystickButton(m_copilote, 5); //bumber gauche
     JoystickButton IntakeOut = new JoystickButton(m_copilote, 6); // bumber droit
@@ -238,8 +238,8 @@ public class RobotContainer {
       m_driverController.back().onTrue(
     new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
    
-   Turret.whileTrue(new AlignTurret(turret, drivebase));
-   Shooter.whileTrue(new ShooterCommand(m_Shooter, drivebase));//Shooter active actuator 50 %
+   Turret.whileTrue(new AlignTurret(turret));
+  // Shooter.whileTrue(new ShooterCommand(m_Shooter, drivebase));//Shooter active actuator 50 %
    Actuator50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
    Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
 

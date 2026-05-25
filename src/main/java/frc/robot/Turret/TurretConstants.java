@@ -26,5 +26,9 @@ public final class TurretConstants {
   public static final int MAX_ANGLE_DEG = 96; // angle max / à remettre à 90 pour le vrai robot
 
   public static final double kP = 0.007;
+
+public static final double kI = 0.0;
+
+public static final double kD = 0.0;
   
 }

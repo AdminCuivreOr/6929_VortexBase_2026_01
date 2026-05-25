@@ -1,75 +1,58 @@
 package frc.robot.Turret;
 
 import frc.robot.LimelightHelpers;
-import frc.robot.SwerveAndAuto.SwerveSubsystem;
 
-import java.util.Optional;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AlignTurret extends Command {
 
     private final TurretSubsystem m_turret;
-    private final SwerveSubsystem m_swerve;
 
-    public AlignTurret(TurretSubsystem turret, SwerveSubsystem swerve) {
+    public AlignTurret(TurretSubsystem turret) {
+
         m_turret = turret;
-        m_swerve = swerve;
-       
 
         addRequirements(turret);
     }
 
     @Override
     public void execute() {
-        var pos = m_swerve.getPose();
-    
 
-        Translation2d target = new Translation2d(0,0);
+        boolean hasTarget = LimelightHelpers.getTV("limelight");
 
-        Optional<Alliance> ally = DriverStation.getAlliance();
-        if (ally.isPresent()) {
-            if (ally.get() == Alliance.Red) {
-                target = new Translation2d(11.916, 4.035);
-            } else {
-                target = new Translation2d(4.63, 4.035);
-            }
-        }
-        else {
-            System.out.println("aucune couleur d'alliance");
-        }
-        
+        if (hasTarget) {
 
-Translation2d robotToTarget = target.minus(pos.getTranslation());
-Rotation2d desiredAngle = robotToTarget.getAngle();
- 
-Rotation2d turretAngle = desiredAngle.minus(pos.getRotation());
- 
-var ll = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+            // erreur horizontale (en degrés)
+            double tx = LimelightHelpers.getTX("limelight") * -0.237; //0.235 si augmente trop loin
+            double angle = m_turret.getAngle();
 
-       
-        if (ll.tagCount > 0) {
-            m_turret.moveToAngle(turretAngle.getDegrees());
+            // contrôle proportionnel simple
+            double output = (tx-angle) * 0.08;
+
+            // limite vitesse moteur
+            output = Math.max(-0.3, Math.min(0.3, output));
+
+            m_turret.setMotor(output);
+
+            SmartDashboard.putNumber("Turret/tx", tx-angle);
+            SmartDashboard.putNumber("Turret/output", output);
+
         } else {
-             m_turret.moveToAngle(turretAngle.getDegrees());
-        }
 
-        SmartDashboard.putNumber("Turret/Error", turretAngle.getDegrees());
+            m_turret.stop();
+        }       
     }
 
     @Override
     public void end(boolean interrupted) {
+
         m_turret.stop();
     }
 
     @Override
     public boolean isFinished() {
+
         return false;
     }
-}
+}                                                                                   

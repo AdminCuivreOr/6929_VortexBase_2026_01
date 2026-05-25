@@ -18,16 +18,16 @@ import frc.robot.Intake.IntakeConstants;
  
 public class BrasIntakeSubsystem extends SubsystemBase {
 
-    private final double kp = 0.1;
-    private final double maxVelocity = 0.5;
-    private final double maxAcceleration = 0.5;
+    private final double kp = 0.2;
+    private final double maxVelocity = 3;
+    private final double maxAcceleration = 3;
 
 
     private final SparkMax m_BrasintakeMotor = new SparkMax(IntakeConstants.motorID, MotorType.kBrushless);
     private final RelativeEncoder m_BrasintakeEncoder = m_BrasintakeMotor.getEncoder();
     private final ProfiledPIDController m_BrasintakePID = 
         new ProfiledPIDController(kp,0,0,
-            new Constraints(maxVelocity, maxAcceleration));
+            new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration));
 
     private ArmFeedforward feedforward = new ArmFeedforward(0.0, 0.02, 0.0);
 
@@ -52,6 +52,11 @@ public class BrasIntakeSubsystem extends SubsystemBase {
 
     public double getVitesse() {
         return m_BrasintakeEncoder.getVelocity();
+    }
+
+    public void resetPID(){
+
+        
     }
 
     public void setPositionTarget(double cible){
