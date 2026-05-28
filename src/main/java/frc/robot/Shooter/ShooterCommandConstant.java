@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.SwerveAndAuto.SwerveSubsystem;
-
+// avoir un bouton avec un shoot constant
 public class ShooterCommandConstant extends Command {
 
     private final ShooterSubsystem shooter;
@@ -25,7 +25,7 @@ public class ShooterCommandConstant extends Command {
     public void execute() {
 
         // appliquer au shooter
-        shooter.setRPM(-4000);
+        shooter.setRPM(-7000);
 
         
     }

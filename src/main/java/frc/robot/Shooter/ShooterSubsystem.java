@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSubsystem extends SubsystemBase {
-
+//PID pour RPM
     private final SparkFlex shooter =
             new SparkFlex(10, MotorType.kBrushless); // shooter id 10
             PIDController pid = new PIDController(ShooterConstants.kP, ShooterConstants.kI,ShooterConstants.kD);
@@ -20,18 +20,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         System.out.println(m_relEncoder.getVelocity());
-        double Rpmveut = m_relEncoder.getVelocity();
+        double Rpmveut = m_relEncoder.getVelocity();    //la valeur qui veut obtenir
     }
 
    public void setRPM(double rpm) {
 
-    double pidOutput = pid.calculate(m_relEncoder.getVelocity(), rpm);
+    double pidOutput = pid.calculate(m_relEncoder.getVelocity(), rpm);  //calcul des PID
     double ffOutput = ff.calculate(rpm);
 
-    double output = pidOutput + ffOutput;
-    output = Math.max(-1, Math.min(1, output));
+    double output = pidOutput + ffOutput;   //calcul de la puissance a appliquer
+    output = Math.max(-1, Math.min(1, output));   //empecher des valeur étrange
 
-    shooter.set(output);
+    shooter.set(output);    //appliquer la puissance
 
     SmartDashboard.putNumber("RPM",(m_relEncoder.getVelocity()));
 }
