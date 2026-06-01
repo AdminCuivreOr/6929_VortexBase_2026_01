@@ -59,6 +59,7 @@ import frc.robot.MainConstants.OperatorConstants;
 
 // Robot - Swerve & Auto
 import frc.robot.SwerveAndAuto.SwerveSubsystem;
+import frc.robot.SwerveAndAuto.AutoAimSwerve;
 import frc.robot.SwerveAndAuto.Autos;
 
 // Robot - Intake
@@ -237,8 +238,22 @@ public class RobotContainer {
     // cancelling on release.<
       m_driverController.back().onTrue(
     new InstantCommand(() -> drivebase.zeroHeading(), drivebase));
+
+
+m_driverController.rightTrigger().whileTrue(
+
+    new AutoAimSwerve(
+
+        drivebase,
+
+        () -> m_driverController.getLeftY(),
+
+        () -> m_driverController.getLeftX()
+    )
+);
+
+
    
-   Turret.whileTrue(new AlignTurret(turret, drivebase));
    Shooter.whileTrue(new ShooterCommand(m_Shooter, drivebase));//Shooter active actuator 50 %
    Actuator50.whileTrue(actuator.setPositionPercentCommand(50)); // étendre à 50 %
    Actuator50.whileFalse(actuator.setPositionPercentCommand(0)); // rétrater lorsque relâché
@@ -261,6 +276,8 @@ public class RobotContainer {
     CurrentRPM = CurrentRPM - 100;
     SmartDashboard.putNumber("VariableRPMShooter", CurrentRPM);
    }));
+
+   
     //o
   /* 
    if (m_copilote.getRawButtonPressed(4)){ // le bouton 4 c'est Y

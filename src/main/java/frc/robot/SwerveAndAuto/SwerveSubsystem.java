@@ -156,6 +156,37 @@ public void periodic() {
   public void driveRobotOriented(ChassisSpeeds velocity) {
     swerveDrive.drive(velocity);
   }
+
+  public void drive(
+    double xSpeed,
+    double ySpeed,
+    double omega,
+    boolean fieldRelative
+) {
+
+    ChassisSpeeds speeds;
+
+    if (fieldRelative) {
+
+        speeds =
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed,
+                ySpeed,
+                omega,
+                getHeading()
+            );
+
+    } else {
+
+        speeds = new ChassisSpeeds(
+            xSpeed,
+            ySpeed,
+            omega
+        );
+    }
+
+    swerveDrive.drive(speeds);
+}
  
   public Command driveRobotOriented(Supplier<ChassisSpeeds> velocity) {
     return run(() -> swerveDrive.drive(velocity.get()));
